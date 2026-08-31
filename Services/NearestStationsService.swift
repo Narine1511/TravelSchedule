@@ -17,7 +17,7 @@ protocol NearestStationsServiceProtocol {
 }
 
 final class NearestStationsService: NearestStationsServiceProtocol {
-    private let client: ClientError
+    private let client: Client
     private let apikey: String
     
     init(client: Client, apikey: String) {
