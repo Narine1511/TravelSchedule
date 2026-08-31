@@ -8,13 +8,13 @@
 import OpenAPIRuntime
 import OpenAPIURLSession
 
-typealias Сopyright = Components.Schemas.CopyrightResponse
+typealias Copyright = Components.Schemas.CopyrightResponse
 
-protocol СopyrighServiceProtocol {
-    func getСopyrigh(format: String?) async throws -> Сopyrigh
+protocol CopyrightServiceProtocol {
+    func getCopyright(format: String?) async throws -> Copyright
 }
 
-final class СopyrighService: СopyrighServiceProtocol {
+final class CopyrightService: CopyrightServiceProtocol {
     private let client: Client
     private let apikey: String
     
@@ -23,13 +23,13 @@ final class СopyrighService: СopyrighServiceProtocol {
         self.apikey = apikey
     }
     
-    func getСopyrigh(
-        format: String? = nil
-    ) async throws -> AllStations {
-        let response = try await client.getСopyrigh(query: .init(
-            apikey: apikey,
-            format: format
-        )
+    func getCopyright(format: String? = nil) async throws -> Copyright {
+        // Теперь и здесь латиница!
+        let response = try await client.getCopyright(
+            query: .init(
+                apikey: apikey,
+                format: format
+            )
         )
         return try response.ok.body.json
     }

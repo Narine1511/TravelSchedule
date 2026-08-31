@@ -34,19 +34,22 @@
 		C055F9F03042DCC700C37E0C /* TravelScheduleUITests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = TravelScheduleUITests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 /* End PBXFileReference section */
 
-/* Begin PBXFileSystemSynchronizedGroupBuildPhaseMembershipExceptionSet section */
-		C055FA3330452D5300C37E0C /* Exceptions for "yaml" folder in "Compile Sources" phase from "TravelSchedule" target */ = {
-			isa = PBXFileSystemSynchronizedGroupBuildPhaseMembershipExceptionSet;
-			buildPhase = C055F9D53042DCC500C37E0C /* Sources */;
+/* Begin PBXFileSystemSynchronizedBuildFileExceptionSet section */
+		C055FAC430459D9A00C37E0C /* Exceptions for "TravelSchedule" folder in "TravelSchedule" target */ = {
+			isa = PBXFileSystemSynchronizedBuildFileExceptionSet;
 			membershipExceptions = (
-				"openapi-generator-config.yaml",
+				Assets.xcassets,
 			);
+			target = C055F9D83042DCC500C37E0C /* TravelSchedule */;
 		};
-/* End PBXFileSystemSynchronizedGroupBuildPhaseMembershipExceptionSet section */
+/* End PBXFileSystemSynchronizedBuildFileExceptionSet section */
 
 /* Begin PBXFileSystemSynchronizedRootGroup section */
 		C055F9DB3042DCC500C37E0C /* TravelSchedule */ = {
 			isa = PBXFileSystemSynchronizedRootGroup;
+			exceptions = (
+				C055FAC430459D9A00C37E0C /* Exceptions for "TravelSchedule" folder in "TravelSchedule" target */,
+			);
 			path = TravelSchedule;
 			sourceTree = "<group>";
 		};
@@ -62,9 +65,6 @@
 		};
 		C055FA103044156B00C37E0C /* yaml */ = {
 			isa = PBXFileSystemSynchronizedRootGroup;
-			exceptions = (
-				C055FA3330452D5300C37E0C /* Exceptions for "yaml" folder in "Compile Sources" phase from "TravelSchedule" target */,
-			);
 			path = yaml;
 			sourceTree = "<group>";
 		};
