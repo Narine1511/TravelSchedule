@@ -32,7 +32,7 @@ final class ThreadStationsService: ThreadStationsServiceProtocol {
         from: String? = nil,
         to: String? = nil,
         date: String? = nil
-    ) async throws -> NearestStations {
+    ) async throws -> ThreadStations {
         let response = try await client.getRouteStations(query: .init(
             apikey: apikey,
             uid: uid,
