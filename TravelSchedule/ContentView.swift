@@ -6,6 +6,7 @@
 //
 
 import SwiftUI
+import OpenAPIRuntime
 
 struct ContentView: View {
     var body: some View {
@@ -36,7 +37,7 @@ struct ContentView: View {
                 // 2. Создаём экземпляр нашего сервиса, передавая ему клиент и API-ключ
                 let service = NearestStationsService(
                     client: client,
-                    apikey: ""
+                    apikey: "2d96ceb2-1b65-486f-ab27-da89ad5c2d10"
                 )
                 
                 // 3. Вызываем метод сервиса
