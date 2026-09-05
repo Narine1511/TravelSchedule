@@ -9,17 +9,55 @@ import SwiftUI
 import OpenAPIURLSession
 
 struct ContentView: View {
+    @State var from: String = ""
+    @State var to: String = ""
     var body: some View {
         VStack {
-            Image(systemName: "globe")
-                .imageScale(.large)
-                .foregroundStyle(.tint)
-            Text("Hello, world!")
+            
+            HStack(spacing: 12)
+            {
+                
+                VStack(spacing: 0) {
+                    TextField("Откуда", text: $from)
+                        .padding(.vertical, 12)
+                        .padding(.leading, 1)
+                    
+                    
+                    TextField("Куда", text: $to)
+                        .padding(.vertical, 12)
+                        .padding(.leading, 1)
+                }
+                .frame(height: 96)
+                .padding(.leading, 16)
+                .padding(.trailing, 68)
+                .background(Color.white)
+                .cornerRadius(20)
+                
+                Button(action: {
+                    
+                }) {
+                    Image("change")
+                        .resizable()
+                        .scaledToFit()
+                        .frame(width: 36, height: 36)
+                        .foregroundColor(.blue) 
+                        .background(Color.white)
+                        .cornerRadius(40)
+                        .padding(12)                   }
+                .cornerRadius(16)
+            }
+            .padding(.horizontal, 16)
+            .padding(.vertical, 12)
+            .background(Color.blue)
+            .cornerRadius(24)
+            Spacer()
         }
-        .padding()
+        
+        .padding(.top, 16)
+        .padding(.horizontal, 16)
         .onAppear {
             testFetchStations()
-                    }
+        }
     }
     // Функция для тестового вызова API
     func testFetchStations() {
