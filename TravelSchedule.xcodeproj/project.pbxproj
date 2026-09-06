@@ -38,7 +38,6 @@
 		C055FAC430459D9A00C37E0C /* Exceptions for "TravelSchedule" folder in "TravelSchedule" target */ = {
 			isa = PBXFileSystemSynchronizedBuildFileExceptionSet;
 			membershipExceptions = (
-				Assets.xcassets,
 				Info.plist,
 			);
 			target = C055F9D83042DCC500C37E0C /* TravelSchedule */;

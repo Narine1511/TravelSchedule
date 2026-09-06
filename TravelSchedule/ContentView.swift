@@ -7,55 +7,146 @@
 
 import SwiftUI
 import OpenAPIURLSession
+struct NoInternetView: View {
+    var body: some View {
+        VStack(spacing: 16) {
+            Image(systemName: "no_internet")
+                .font(.system(size: 60))
+                .foregroundColor(.gray)
+            
+            Text("Нет интернета")
+                .font(.system(size: 20, weight: .bold))
+                .foregroundColor(.black)
+        }
+        .frame(maxWidth: .infinity, maxHeight: .infinity)
+        .padding()
+    }
+}
+
+struct ServerErrorView: View {
+    
+    var body: some View {
+        VStack(spacing: 16) {
+            Image(systemName: "server_error")
+                .font(.system(size: 60))
+                .foregroundColor(.gray)
+            
+            Text("Ошибка сервера")
+                .font(.system(size: 20, weight: .bold))
+                .foregroundColor(.black)
+        }
+        .frame(maxWidth: .infinity, maxHeight: .infinity)
+        .padding()
+    }
+}
+
 
 struct ContentView: View {
+    
     @State var from: String = ""
     @State var to: String = ""
+    @State private var isSelectingFrom = false
+    @State private var isSelectingTo = false
+    
+    @State private var hasNoInternet = false
+    @State private var hasServerError = false
+    
     var body: some View {
-        VStack {
-            
-            HStack(spacing: 12)
-            {
+        NavigationStack {
+            VStack {
                 
-                VStack(spacing: 0) {
-                    TextField("Откуда", text: $from)
-                        .padding(.vertical, 12)
-                        .padding(.leading, 1)
+                HStack(spacing: 12) {
                     
-                    
-                    TextField("Куда", text: $to)
-                        .padding(.vertical, 12)
-                        .padding(.leading, 1)
-                }
-                .frame(height: 96)
-                .padding(.leading, 16)
-                .padding(.trailing, 68)
-                .background(Color.white)
-                .cornerRadius(20)
-                
-                Button(action: {
-                    
-                }) {
-                    Image("change")
-                        .resizable()
-                        .scaledToFit()
-                        .frame(width: 36, height: 36)
-                        .foregroundColor(.blue) 
+                    VStack(spacing: 0) {
+                        
+                        Button(action: {
+                            isSelectingFrom = true
+                        }) {
+                            HStack {
+                                Text(from.isEmpty ? "Откуда" : from)
+                                    .padding(.leading, 1)
+                                    .foregroundColor(.gray)
+                                Spacer()
+                            }
+                            .padding(.vertical, 14)
+                            .padding(.horizontal, 16)
+                        }
+                        
+                        Button(action: {
+                            isSelectingTo = true
+                        }) {
+                            
+                            HStack {
+                                Text(to.isEmpty ? "Куда" : to)
+                                    .padding(.leading, 1)
+                                    .foregroundColor(.gray)
+                                Spacer()
+                            }
+                            .padding(.vertical, 16)
+                            .padding(.horizontal, 16)
+                            
+                        }
+                        
+                        .padding(.trailing, 68)
+                        .cornerRadius(20)
+                        
                         .background(Color.white)
-                        .cornerRadius(40)
+                    }
+                    .frame(maxWidth: .infinity)
+                    .background(Color.white)
+                    .cornerRadius(20)
+                    
+                    Button(action: {
+                        let temp = from
+                        from = to
+                        to = temp
+                        
+                    }) {
+                        Image("change")
+                            .resizable()
+                            .scaledToFit()
+                            .frame(width: 36, height: 36)
+                            .foregroundColor(.blue)
+                            .background(Color.white)
+                            .cornerRadius(40)
                         .padding(12)                   }
-                .cornerRadius(16)
+                    .cornerRadius(16)
+                }
+                
+                .padding(.horizontal, 16)
+                .padding(.vertical, 16)
+                
+                .background(Color.blue)
+                .cornerRadius(24)
+                .frame(height: 96)
+                .padding(.top, 40)
+                Spacer()
             }
+            
+            .padding(.top, 16)
             .padding(.horizontal, 16)
-            .padding(.vertical, 12)
-            .background(Color.blue)
-            .cornerRadius(24)
-            Spacer()
+            
+            .navigationBarHidden(true)
+            .navigationDestination(isPresented: $isSelectingFrom) {
+                CitySelectionView(selectedStation: $from)
+            }
+            .navigationDestination(isPresented: $isSelectingTo) {
+                CitySelectionView(selectedStation: $to)
+            }
+        }
+        .overlay {
+            if hasNoInternet {
+                NoInternetView()
+                    .background(Color.white)
+                    .ignoresSafeArea()
+            } else if hasServerError {
+                ServerErrorView()
+                    .background(Color.white)
+                    .ignoresSafeArea()
+            }
         }
         
-        .padding(.top, 16)
-        .padding(.horizontal, 16)
-        .onAppear {
+        .onAppear() {
             testFetchStations()
         }
     }
