@@ -39,7 +39,7 @@ struct CitySelectionView: View {
                     dismiss()
                 }) {
                     Image(systemName: "chevron.left")
-                        .foregroundColor(.black)
+                        .foregroundColor(.ypBlack1)
                         .font(.system(size: 20, weight: .medium))
                         .padding(.leading, 16) // Отступ кнопки от края экрана
                 }
@@ -48,7 +48,7 @@ struct CitySelectionView: View {
                 
                 Text("Выбор города")
                     .font(.system(size: 17, weight: .bold))
-                    .foregroundColor(.black)
+                    .foregroundColor(.ypBlack1)
                 
                 Spacer()
                 
@@ -63,7 +63,7 @@ struct CitySelectionView: View {
                     .font(.system(size: 18))
                 
                 TextField("Введите запрос", text: $searchText)
-                    .foregroundColor(.black)
+                    .foregroundColor(.ypBlack1)
                     .autocorrectionDisabled()
             }
             .padding(.horizontal, 12)
@@ -80,8 +80,10 @@ struct CitySelectionView: View {
                     VStack(spacing: 16) {
                         Text("Город не найден")
                             .font(.system(size: 24, weight: .bold))
-                        .foregroundColor(.black)}
+                        .foregroundColor(.ypBlack1)}
+                    
                     .frame(maxWidth: .infinity)
+                    .background(Color.ypWhite)
                     .padding(.top, 176)
                     .listRowSeparator(.hidden)
                     .listRowBackground(Color.clear)
@@ -90,20 +92,25 @@ struct CitySelectionView: View {
                         NavigationLink(destination: StationSelectionView(cityName: city, selectedStation: $selectedStation)) {
                             HStack {
                                 Text(city)
-                                    .foregroundColor(.black)
+                                    .foregroundColor(.ypBlack1)
                                     .font(.system(size: 17))
+                                
                                 
                                 Spacer()
                             }
+                            .background(Color.ypWhite)
                             .padding(.vertical, 8)
                         }
+                        .listRowBackground(Color.ypWhite)
                     }
+                    .background(Color.ypWhite)
+                    .listRowSeparator(.hidden)
                 }
             }
             .listStyle(.plain)
-            .scrollContentBackground(.hidden) // Делаем фон списка прозрачным
+           .scrollContentBackground(.hidden) // Делаем фон списка прозрачным*/
         }
-        .background(Color.white)
+        .background(Color.ypWhite)
         .navigationBarHidden(true)
     }
 }

@@ -30,7 +30,7 @@ struct FilterView: View {
                     dismiss()
                 }) {
                     Image(systemName: "chevron.left")
-                        .foregroundColor(.black)
+                        .foregroundColor(.ypBlack1)
                         .font(.system(size: 20, weight: .medium))
                 }
                 .padding(.leading, 16)
@@ -45,7 +45,7 @@ struct FilterView: View {
                     
                     Text("Время отправления")
                         .font(.system(size: 24, weight: .bold))
-                        .foregroundColor(.black)
+                        .foregroundColor(.ypBlack1)
                         .textCase(nil)
                         .padding(.bottom, 4)
                         .padding(.top, 16)
@@ -55,7 +55,7 @@ struct FilterView: View {
                     HStack {
                         Text("Утро 06:00 - 12:00")
                             .font(.system(size: 17, weight: .regular))
-                            .foregroundColor(.black)
+                            .foregroundColor(.ypBlack1)
                         
                         Spacer()
                         
@@ -64,7 +64,7 @@ struct FilterView: View {
                         }) {
                             Image(systemName: isMorningSelected ? "checkmark.square.fill" : "square")
                                 .font(.system(size: 20))
-                                .foregroundColor(.black)
+                                .foregroundColor(.ypBlack1)
                         }
                         .buttonStyle(.plain)
                     }
@@ -74,7 +74,7 @@ struct FilterView: View {
                     HStack {
                         Text("День 12:00 - 18:00")
                             .font(.system(size: 17, weight: .regular))
-                            .foregroundColor(.black)
+                            .foregroundColor(.ypBlack1)
                         
                         Spacer()
                         
@@ -83,7 +83,7 @@ struct FilterView: View {
                         }) {
                             Image(systemName: isDaySelected ? "checkmark.square.fill" : "square")
                                 .font(.system(size: 20))
-                                .foregroundColor(.black)
+                                .foregroundColor(.ypBlack1)
                         }
                         .buttonStyle(.plain)
                     }
@@ -93,7 +93,7 @@ struct FilterView: View {
                     HStack {
                         Text("Вечер 18:00 - 00:00")
                             .font(.system(size: 17, weight: .regular))
-                            .foregroundColor(.black)
+                            .foregroundColor(.ypBlack1)
                         
                         Spacer()
                         
@@ -102,7 +102,7 @@ struct FilterView: View {
                         }) {
                             Image(systemName: isEveningSelected ? "checkmark.square.fill" : "square")
                                 .font(.system(size: 20))
-                                .foregroundColor(.black)
+                                .foregroundColor(.ypBlack1)
                         }
                         .buttonStyle(.plain)
                     }
@@ -112,7 +112,7 @@ struct FilterView: View {
                     HStack {
                         Text("Ночь 00:00 - 06:00")
                             .font(.system(size: 17, weight: .regular))
-                            .foregroundColor(.black)
+                            .foregroundColor(.ypBlack1)
                         
                         Spacer()
                         
@@ -121,7 +121,7 @@ struct FilterView: View {
                         }) {
                             Image(systemName: isNightSelected ? "checkmark.square.fill" : "square")
                                 .font(.system(size: 20))
-                                .foregroundColor(.black)
+                                .foregroundColor(.ypBlack1)
                         }
                         .buttonStyle(.plain)
                     }
@@ -130,7 +130,7 @@ struct FilterView: View {
                     
                     Text("Показывать варианты с пересадками")
                         .font(.system(size: 24, weight: .bold))
-                        .foregroundColor(.black)
+                        .foregroundColor(.ypBlack1)
                         .textCase(nil)
                         .padding(.bottom, 4)
                         .padding(.top, 16)
@@ -140,7 +140,7 @@ struct FilterView: View {
                     HStack {
                         Text("Да")
                             .font(.system(size: 17, weight: .regular))
-                            .foregroundColor(.black)
+                            .foregroundColor(.ypBlack1)
                         
                         Spacer()
                         
@@ -149,7 +149,7 @@ struct FilterView: View {
                         }) {
                             Image(systemName: transferOption == "Да" ? "largecircle.fill.circle" : "circle")
                                 .font(.system(size: 20))
-                                .foregroundColor(.black)
+                                .foregroundColor(.ypBlack1)
                         }
                         .buttonStyle(.plain)
                     }
@@ -159,7 +159,7 @@ struct FilterView: View {
                     HStack {
                         Text("Нет")
                             .font(.system(size: 17, weight: .regular))
-                            .foregroundColor(.black)
+                            .foregroundColor(.ypBlack1)
                         
                         Spacer()
                         
@@ -168,7 +168,7 @@ struct FilterView: View {
                         }) {
                             Image(systemName: transferOption == "Нет" ? "largecircle.fill.circle" : "circle")
                                 .font(.system(size: 20))
-                                .foregroundColor(.black)
+                                .foregroundColor(.ypBlack1)
                         }
                         .buttonStyle(.plain)
                     }
@@ -180,7 +180,7 @@ struct FilterView: View {
                 .padding(.bottom, 120)
             }
             .scrollContentBackground(.hidden)
-            .background(Color.white)
+            .background(Color.ypWhite)
         }
         
         .safeAreaInset(edge: .bottom) {

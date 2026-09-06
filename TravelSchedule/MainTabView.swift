@@ -12,7 +12,7 @@ struct MainTabView: View {
     init() {
         let appearance = UITabBarAppearance()
         appearance.configureWithOpaqueBackground()
-        appearance.backgroundColor = .white
+        appearance.backgroundColor = .ypWhite
         appearance.shadowColor = .ypGray.withAlphaComponent(0.3)
         appearance.shadowImage = UIImage()
         UITabBar.appearance().standardAppearance = appearance
@@ -35,7 +35,7 @@ struct MainTabView: View {
                 }
             
         }
-        .tint(.black)
+        .tint(.ypBlack1)
     }
 }
 

@@ -14,7 +14,7 @@ struct CarrierListView: View {
     var body: some View {
         
         ZStack {
-            Color(UIColor.systemBackground)
+            Color(UIColor.ypWhite)
                 .ignoresSafeArea()
             
             VStack(spacing: 0) {
@@ -23,7 +23,7 @@ struct CarrierListView: View {
                     dismiss()
                 }) {
                     Image(systemName: "chevron.left")
-                        .foregroundColor(.black)
+                        .foregroundColor(.ypBlack1)
                         .font(.system(size: 20, weight: .medium))
                     
                         .frame(maxWidth: .infinity, alignment: .leading)
@@ -34,7 +34,7 @@ struct CarrierListView: View {
                 
                 Text(routeTitle)
                     .font(.system(size: 20, weight: .bold))
-                    .foregroundColor(.black)
+                    .foregroundColor(.ypBlack1)
                     .padding(.top, 24)
                     .frame(maxWidth: .infinity, alignment: .leading)
                     .padding(.horizontal, 16)
@@ -76,7 +76,7 @@ struct CarrierListView: View {
                 .padding(.bottom, 8)
                 .background(
                     LinearGradient(
-                        gradient: Gradient(colors: [Color(UIColor.systemBackground).opacity(0), Color(UIColor.systemBackground)]),
+                        gradient: Gradient(colors: [Color(UIColor.ypWhite).opacity(0), Color(UIColor.ypWhite)]),
                         startPoint: .top,
                         endPoint: .bottom
                     )
@@ -110,7 +110,7 @@ struct CarrierCardView: View {
                                     VStack(alignment: .leading, spacing: 4) {
                                         Text(carrierName)
                                             .font(.system(size: 17, weight: .semibold))
-                                            .foregroundColor(.black)
+                                            .foregroundColor(.ypBlack1)
                                         
                                         if isTransfer {
                                             Text("С пересадкой в Костроме")
@@ -127,7 +127,7 @@ struct CarrierCardView: View {
                 HStack(spacing: 0) {
                                 Text(startTime)
                                     .font(.system(size: 20, weight: .bold))
-                                    .foregroundColor(.black)
+                                    .foregroundColor(.ypBlack1)
                     HStack(spacing: 4) {
                                         Rectangle()
                                             .fill(Color.gray.opacity(0.3))
@@ -145,7 +145,7 @@ struct CarrierCardView: View {
                                     
                                     Text(endTime)
                                         .font(.system(size: 20, weight: .bold))
-                                        .foregroundColor(.black)
+                                        .foregroundColor(.ypBlack1)
                                 }
                             }
             .padding(16)

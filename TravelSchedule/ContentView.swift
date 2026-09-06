@@ -16,7 +16,7 @@ struct NoInternetView: View {
             
             Text("Нет интернета")
                 .font(.system(size: 20, weight: .bold))
-                .foregroundColor(.black)
+                .foregroundColor(.ypBlack1)
         }
         .frame(maxWidth: .infinity, maxHeight: .infinity)
         .padding()
@@ -33,7 +33,7 @@ struct ServerErrorView: View {
             
             Text("Ошибка сервера")
                 .font(.system(size: 20, weight: .bold))
-                .foregroundColor(.black)
+                .foregroundColor(.ypBlack1)
         }
         .frame(maxWidth: .infinity, maxHeight: .infinity)
         .padding()
@@ -54,7 +54,6 @@ struct ContentView: View {
     var body: some View {
         NavigationStack {
             VStack {
-                
                 HStack(spacing: 12) {
                     
                     VStack(spacing: 0) {
@@ -107,7 +106,7 @@ struct ContentView: View {
                             .scaledToFit()
                             .frame(width: 36, height: 36)
                             .foregroundColor(.blue)
-                            .background(Color.white)
+                            .background(Color.ypWhite)
                             .cornerRadius(40)
                         .padding(12)                   }
                     .cornerRadius(16)
@@ -125,7 +124,7 @@ struct ContentView: View {
             
             .padding(.top, 16)
             .padding(.horizontal, 16)
-            
+            .background(Color.ypWhite)
             .navigationBarHidden(true)
             .navigationDestination(isPresented: $isSelectingFrom) {
                 CitySelectionView(selectedStation: $from)
@@ -134,14 +133,15 @@ struct ContentView: View {
                 CitySelectionView(selectedStation: $to)
             }
         }
+        
         .overlay {
             if hasNoInternet {
                 NoInternetView()
-                    .background(Color.white)
+                    .background(Color.ypWhite)
                     .ignoresSafeArea()
             } else if hasServerError {
                 ServerErrorView()
-                    .background(Color.white)
+                    .background(Color.ypWhite)
                     .ignoresSafeArea()
             }
         }

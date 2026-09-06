@@ -40,7 +40,7 @@ struct StationSelectionView: View {
                     dismiss()
                 }) {
                     Image(systemName: "chevron.left")
-                        .foregroundColor(.black)
+                        .foregroundColor(.ypBlack1)
                         .font(.system(size: 20, weight: .medium))
                         .padding(.leading, 16)
                 }
@@ -49,7 +49,7 @@ struct StationSelectionView: View {
                 
                 Text("Выбор станции")
                     .font(.system(size: 17, weight: .bold))
-                    .foregroundColor(.black)
+                    .foregroundColor(.ypBlack1)
                 
                 Spacer()
                 
@@ -64,7 +64,7 @@ struct StationSelectionView: View {
                     .font(.system(size: 18))
                 
                 TextField("Введите запрос", text: $searchText)
-                    .foregroundColor(.black)
+                    .foregroundColor(.ypBlack1)
                     .autocorrectionDisabled()
                 
                 if !searchText.isEmpty {
@@ -89,19 +89,22 @@ struct StationSelectionView: View {
                     NavigationLink(destination: CarrierListView()) {
                         HStack {
                             Text(station)
-                                .foregroundColor(.black)
+                                .foregroundColor(.ypBlack1)
                                 .font(.system(size: 17))
                             
                             Spacer()
                         }
                         .padding(.vertical, 8)
                     }
+                    .listRowBackground(Color.ypWhite)
+                    .listRowSeparator(.hidden)
                 }
             }
+            .listRowBackground(Color.ypWhite)
             .listStyle(.plain)
             .scrollContentBackground(.hidden)
         }
-        .background(Color.white)
+        .background(Color.ypWhite)
         .navigationBarHidden(true)
     }
 }
