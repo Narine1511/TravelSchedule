@@ -11,6 +11,9 @@ struct CarrierListView: View {
     let routeTitle: String = "Москва (Ярославский вокзал) → Санкт Петербург (Балтийский вокзал)"
     @Environment(\.dismiss) var dismiss
     @State private var isShowingFilter = false
+    
+    @State private var hasCarriers: Bool = false
+    
     var body: some View {
         
         ZStack {
@@ -39,22 +42,39 @@ struct CarrierListView: View {
                     .frame(maxWidth: .infinity, alignment: .leading)
                     .padding(.horizontal, 16)
                 
-                ScrollView {
-                    LazyVStack(spacing: 16) {
-                        ForEach(0..<5) { index in
-                            CarrierCardView(
-                                carrierName: index % 2 == 0 ? "РЖД" : "ФГК",
-                                isTransfer: index % 2 == 0,
-                                date: index % 2 == 0 ? "14 января" : "15 января",
-                                startTime: "22:30",
-                                duration: index % 2 == 0 ? "20 часов" : "9 часов",
-                                endTime: index % 2 == 0 ? "08:15" : "09:00",
-                                logoName: index % 2 == 0 ? "rzhd_logo" : "fgk_logo")
-                        }
+                
+                if !hasCarriers {
+                    // Пустое состояние
+                    VStack(spacing: 16) {
+                        Image(systemName: "magnifyingglass")
+                            .font(.system(size: 60))
+                            .foregroundColor(.gray)
+                        
+                        Text("Вариантов нет")
+                            .font(.system(size: 24, weight: .bold))
+                            .foregroundColor(.ypBlack1)
                     }
-                    .padding(.horizontal, 16)
-                    .padding(.top, 24)
-                    .padding(.bottom, 120)
+                    .frame(maxWidth: .infinity, maxHeight: .infinity)
+                    .padding(.top, 100)
+                } else {
+                    
+                    ScrollView {
+                        LazyVStack(spacing: 16) {
+                            ForEach(0..<5) { index in
+                                CarrierCardView(
+                                    carrierName: index % 2 == 0 ? "РЖД" : "ФГК",
+                                    isTransfer: index % 2 == 0,
+                                    date: index % 2 == 0 ? "14 января" : "15 января",
+                                    startTime: "22:30",
+                                    duration: index % 2 == 0 ? "20 часов" : "9 часов",
+                                    endTime: index % 2 == 0 ? "08:15" : "09:00",
+                                    logoName: index % 2 == 0 ? "rzhd_logo" : "fgk_logo")
+                            }
+                        }
+                        .padding(.horizontal, 16)
+                        .padding(.top, 24)
+                        .padding(.bottom, 120)
+                    }
                 }
             }
         }

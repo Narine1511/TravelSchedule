@@ -23,6 +23,7 @@ struct StationSelectionView: View {
         "Ленинградский вокзал"
     ]
     
+    
     var filteredStations: [String] {
         if searchText.isEmpty {
             return stations
@@ -85,19 +86,40 @@ struct StationSelectionView: View {
             
             // Список станций
             List {
-                ForEach(filteredStations, id: \.self) { station in
-                    NavigationLink(destination: CarrierListView()) {
-                        HStack {
-                            Text(station)
-                                .foregroundColor(.ypBlack1)
-                                .font(.system(size: 17))
-                            
-                            Spacer()
-                        }
-                        .padding(.vertical, 8)
-                    }
-                    .listRowBackground(Color.ypWhite)
+                
+                if filteredStations.isEmpty {
+                    VStack(spacing: 16) {
+                        Text("Станция не найдена")
+                            .font(.system(size: 24, weight: .bold))
+                        .foregroundColor(.ypBlack1)}
+                    
+                    .frame(maxWidth: .infinity)
+                    .background(Color.ypWhite)
+                    .padding(.top, 176)
                     .listRowSeparator(.hidden)
+                    /*.listRowBackground(Color.clear)*/
+                } else {
+                    
+                    ForEach(filteredStations, id: \.self) { station in
+                        Button(action: {
+                            selectedStation = "\(cityName) (\(station))"
+                            dismiss()
+                            DispatchQueue.main.asyncAfter(deadline: .now() + 0.3) {
+                                dismiss()
+                            }
+                        }) {
+                            HStack {
+                                Text(station)
+                                    .foregroundColor(.ypBlack1)
+                                    .font(.system(size: 17))
+                                
+                                Spacer()
+                            }
+                            .padding(.vertical, 8)
+                        }
+                        .listRowBackground(Color.ypWhite)
+                        .listRowSeparator(.hidden)
+                    }
                 }
             }
             .listRowBackground(Color.ypWhite)

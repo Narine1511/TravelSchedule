@@ -47,9 +47,17 @@ struct ContentView: View {
     @State var to: String = ""
     @State private var isSelectingFrom = false
     @State private var isSelectingTo = false
+    @State private var isShowingCarrierList = false
+    
+    @State private var navigateToStationSelection = false
+    @State private var selectedCityForStation = ""
     
     @State private var hasNoInternet = false
     @State private var hasServerError = false
+    
+    var isFormFilled: Bool {
+            return !from.isEmpty && !to.isEmpty
+        }
     
     var body: some View {
         NavigationStack {
@@ -64,7 +72,7 @@ struct ContentView: View {
                             HStack {
                                 Text(from.isEmpty ? "Откуда" : from)
                                     .padding(.leading, 1)
-                                    .foregroundColor(.gray)
+                                    .foregroundColor(from.isEmpty ? .gray : .black)
                                 Spacer()
                             }
                             .padding(.vertical, 14)
@@ -78,7 +86,7 @@ struct ContentView: View {
                             HStack {
                                 Text(to.isEmpty ? "Куда" : to)
                                     .padding(.leading, 1)
-                                    .foregroundColor(.gray)
+                                    .foregroundColor(to.isEmpty ? .gray : .black)
                                 Spacer()
                             }
                             .padding(.vertical, 16)
@@ -88,7 +96,6 @@ struct ContentView: View {
                         
                         .padding(.trailing, 68)
                         .cornerRadius(20)
-                        
                         .background(Color.white)
                     }
                     .frame(maxWidth: .infinity)
@@ -105,7 +112,7 @@ struct ContentView: View {
                             .resizable()
                             .scaledToFit()
                             .frame(width: 36, height: 36)
-                            .foregroundColor(.blue)
+                            .foregroundColor(.ypBlue)
                             .background(Color.ypWhite)
                             .cornerRadius(40)
                         .padding(12)                   }
@@ -115,10 +122,28 @@ struct ContentView: View {
                 .padding(.horizontal, 16)
                 .padding(.vertical, 16)
                 
-                .background(Color.blue)
+                .background(Color.ypBlue)
                 .cornerRadius(24)
                 .frame(height: 96)
                 .padding(.top, 40)
+                
+                if isFormFilled {
+                    Button(action: {
+                        isShowingCarrierList = true
+                    }) {
+                        Text("Найти")
+                            .font(.system(size: 17, weight: .bold))
+                            .foregroundColor(.white)
+                            .frame(width: 150)
+                            .padding(.vertical, 16)
+                            .background(Color.ypBlue)
+                            .cornerRadius(16)
+                            .padding(.horizontal, 16)
+                    }
+                    .padding(.top, 20)
+                    .transition(.opacity)
+                }
+                
                 Spacer()
             }
             
@@ -132,22 +157,25 @@ struct ContentView: View {
             .navigationDestination(isPresented: $isSelectingTo) {
                 CitySelectionView(selectedStation: $to)
             }
-        }
-        
-        .overlay {
-            if hasNoInternet {
-                NoInternetView()
-                    .background(Color.ypWhite)
-                    .ignoresSafeArea()
-            } else if hasServerError {
-                ServerErrorView()
-                    .background(Color.ypWhite)
-                    .ignoresSafeArea()
+            .navigationDestination(isPresented: $isShowingCarrierList) {
+                CarrierListView()
             }
-        }
-        
-        .onAppear() {
-            testFetchStations()
+            
+            .overlay {
+                if hasNoInternet {
+                    NoInternetView()
+                        .background(Color.ypWhite)
+                        .ignoresSafeArea()
+                } else if hasServerError {
+                    ServerErrorView()
+                        .background(Color.ypWhite)
+                        .ignoresSafeArea()
+                }
+            }
+            
+            .onAppear() {
+                testFetchStations()
+            }
         }
     }
     // Функция для тестового вызова API

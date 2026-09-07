@@ -86,7 +86,7 @@ struct CitySelectionView: View {
                     .background(Color.ypWhite)
                     .padding(.top, 176)
                     .listRowSeparator(.hidden)
-                    .listRowBackground(Color.clear)
+                    /*.listRowBackground(Color.clear)*/
                 } else {
                     ForEach(filteredCities, id: \.self) { city in
                         NavigationLink(destination: StationSelectionView(cityName: city, selectedStation: $selectedStation)) {
@@ -112,6 +112,7 @@ struct CitySelectionView: View {
         }
         .background(Color.ypWhite)
         .navigationBarHidden(true)
+        .toolbar(.hidden, for: .tabBar)
     }
 }
 
