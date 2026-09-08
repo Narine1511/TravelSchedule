@@ -24,13 +24,13 @@ struct MainTabView: View {
         TabView {
             ContentView()
                 .tabItem {
-                    Image("schedule")
+                    Image("Schedule")
                         .renderingMode(.template)
                 }
             
             Text("Экран поездок")
                 .tabItem {
-                    Image("settings")
+                    Image("Settings")
                         .renderingMode(.template)
                 }
             
