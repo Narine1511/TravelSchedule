@@ -63,7 +63,7 @@ struct CitySelectionView: View {
                     .font(.system(size: 18))
                 
                 TextField("Введите запрос", text: $searchText)
-                    .foregroundColor(.ypBlack1)
+                    .foregroundColor(.ypBlack2)
                     .autocorrectionDisabled()
             }
             .padding(.horizontal, 12)

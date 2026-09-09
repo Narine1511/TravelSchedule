@@ -46,16 +46,14 @@ struct CarrierListView: View {
                 if !hasCarriers {
                     // Пустое состояние
                     VStack(spacing: 16) {
-                        Image(systemName: "magnifyingglass")
-                            .font(.system(size: 60))
-                            .foregroundColor(.gray)
                         
                         Text("Вариантов нет")
                             .font(.system(size: 24, weight: .bold))
                             .foregroundColor(.ypBlack1)
                     }
                     .frame(maxWidth: .infinity, maxHeight: .infinity)
-                    .padding(.top, 100)
+                    .padding(.vertical)
+                    .padding(.horizontal)
                 } else {
                     
                     ScrollView {
@@ -87,9 +85,9 @@ struct CarrierListView: View {
                     Text("Уточнить время")
                         .font(.system(size: 17, weight: .bold))
                         .foregroundColor(.white)
+                        .frame(maxWidth: .infinity)
                         .padding(.vertical, 16)
-                        .padding(.horizontal, 32)
-                        .background(Color.blue)
+                        .background(Color.ypBlue)
                         .cornerRadius(16)
                 }
                 .padding(.horizontal, 16)
