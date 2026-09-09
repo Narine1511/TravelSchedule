@@ -13,7 +13,7 @@ struct StationSelectionView: View {
     
     @State private var searchText = ""
     @Environment(\.dismiss) var dismiss
-
+    
     let stations = [
         "Киевский вокзал",
         "Курский вокзал",
@@ -33,104 +33,108 @@ struct StationSelectionView: View {
     }
     
     var body: some View {
-        VStack(spacing: 0) {
-            
-            // Заголовок
-            HStack {
-                Button(action: {
-                    dismiss()
-                }) {
-                    Image(systemName: "chevron.left")
-                        .foregroundColor(.ypBlack2)
-                        .font(.system(size: 20, weight: .medium))
-                        .padding(.leading, 16)
-                }
+        NavigationStack {
+            VStack(spacing: 0) {
                 
-                Spacer()
-                
-                Text("Выбор станции")
-                    .font(.system(size: 17, weight: .bold))
-                    .foregroundColor(.ypBlack1)
-                
-                Spacer()
-                
-                Color.clear.frame(width: 24, height: 24)
-            }
-            .padding(.vertical, 16)
-            
-            // Поисковая строка
-            HStack {
-                Image(systemName: "magnifyingglass")
-                    .foregroundColor(.gray)
-                    .font(.system(size: 18))
-                
-                TextField("Введите запрос", text: $searchText)
-                    .foregroundColor(.ypBlack2)
-                    .autocorrectionDisabled()
-                
-                if !searchText.isEmpty {
+                // Заголовок
+                HStack {
                     Button(action: {
-                        searchText = ""
+                        dismiss()
                     }) {
-                        Image(systemName: "xmark.circle.fill")
-                            .foregroundColor(.gray)
+                        Image(systemName: "chevron.left")
+                            .foregroundColor(.ypBlack2)
+                            .font(.system(size: 20, weight: .medium))
+                            .padding(.leading, 16)
                     }
+                    
+                    Spacer()
+                    
+                    Text("Выбор станции")
+                        .font(.system(size: 17, weight: .bold))
+                        .foregroundColor(.ypBlack1)
+                    
+                    Spacer()
+                    
+                    Color.clear.frame(width: 24, height: 24)
                 }
-            }
-            .padding(.horizontal, 12)
-            .padding(.vertical, 12)
-            .background(Color.ypLightGray)
-            .cornerRadius(12)
-            .padding(.horizontal, 16)
-            .padding(.bottom, 16)
-            
-            // Список станций
-            List {
+                .padding(.vertical, 16)
                 
-                if filteredStations.isEmpty {
-                    VStack(spacing: 16) {
-                        Text("Станция не найдена")
-                            .font(.system(size: 24, weight: .bold))
-                        .foregroundColor(.ypBlack1)}
+                // Поисковая строка
+                HStack {
+                    Image(systemName: "magnifyingglass")
+                        .foregroundColor(.gray)
+                        .font(.system(size: 18))
                     
-                    .frame(maxWidth: .infinity)
-                    .background(Color.ypWhite)
-                    .padding(.top, 176)
-                    .listRowSeparator(.hidden)
-                    /*.listRowBackground(Color.clear)*/
-                } else {
+                    TextField("Введите запрос", text: $searchText)
+                        .foregroundColor(.ypBlack2)
+                        .autocorrectionDisabled()
                     
-                    ForEach(filteredStations, id: \.self) { station in
+                    if !searchText.isEmpty {
                         Button(action: {
-                            selectedStation = "\(cityName) (\(station))"
-                            dismiss()
-                            DispatchQueue.main.asyncAfter(deadline: .now() + 0.3) {
-                                dismiss()
-                            }
+                            searchText = ""
                         }) {
-                            HStack {
-                                Text(station)
-                                    .foregroundColor(.ypBlack2)
-                                    .font(.system(size: 17))
-                                
-                                Spacer()
-                                Image(systemName: "chevron.right")
-                                            .foregroundColor(.ypBlack2)
-                                            .font(.system(size: 14))
-                            }
-                            .padding(.vertical, 8)
+                            Image(systemName: "xmark.circle.fill")
+                                .foregroundColor(.gray)
                         }
-                        .listRowBackground(Color.ypWhite)
-                        .listRowSeparator(.hidden)
                     }
                 }
+                .padding(.horizontal, 12)
+                .padding(.vertical, 12)
+                .background(Color.ypLightGray)
+                .cornerRadius(12)
+                .padding(.horizontal, 16)
+                .padding(.bottom, 16)
+                
+                // Список станций
+                List {
+                    
+                    if filteredStations.isEmpty {
+                        VStack(spacing: 16) {
+                            Text("Станция не найдена")
+                                .font(.system(size: 24, weight: .bold))
+                            .foregroundColor(.ypBlack1)}
+                        
+                        .frame(maxWidth: .infinity)
+                        .background(Color.ypWhite)
+                        .padding(.top, 176)
+                        .listRowSeparator(.hidden)
+                        /*.listRowBackground(Color.clear)*/
+                    } else {
+                        
+                        ForEach(filteredStations, id: \.self) { station in
+                            Button(action: {
+                                selectedStation = "\(cityName) (\(station))"
+                                dismiss()
+                                DispatchQueue.main.asyncAfter(deadline: .now() + 0.3) {
+                                    dismiss()
+                                }
+                            }) {
+                                HStack {
+                                    Text(station)
+                                        .foregroundColor(.ypBlack2)
+                                        .font(.system(size: 17))
+                                    
+                                    Spacer()
+                                    Image(systemName: "chevron.right")
+                                        .foregroundColor(.ypBlack2)
+                                        .font(.system(size: 14))
+                                }
+                                .padding(.vertical, 8)
+                            }
+                            .listRowBackground(Color.ypWhite)
+                            .listRowSeparator(.hidden)
+                        }
+                    }
+                }
+                .listRowBackground(Color.ypWhite)
+                .listStyle(.plain)
+                .scrollContentBackground(.hidden)
             }
-            .listRowBackground(Color.ypWhite)
-            .listStyle(.plain)
-            .scrollContentBackground(.hidden)
+            .background(Color.ypWhite)
+            .navigationBarHidden(true)
+            .navigationBarBackButtonHidden(true)
+            .toolbar(.hidden, for: .tabBar)
         }
-        .background(Color.ypWhite)
-        .navigationBarHidden(true)
     }
 }
 
