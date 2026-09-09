@@ -41,7 +41,7 @@ struct StationSelectionView: View {
                     dismiss()
                 }) {
                     Image(systemName: "chevron.left")
-                        .foregroundColor(.ypBlack1)
+                        .foregroundColor(.ypBlack2)
                         .font(.system(size: 20, weight: .medium))
                         .padding(.leading, 16)
                 }
@@ -110,10 +110,13 @@ struct StationSelectionView: View {
                         }) {
                             HStack {
                                 Text(station)
-                                    .foregroundColor(.ypBlack1)
+                                    .foregroundColor(.ypBlack2)
                                     .font(.system(size: 17))
                                 
                                 Spacer()
+                                Image(systemName: "chevron.right")
+                                            .foregroundColor(.ypBlack2)
+                                            .font(.system(size: 14))
                             }
                             .padding(.vertical, 8)
                         }
