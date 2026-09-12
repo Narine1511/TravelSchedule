@@ -7,19 +7,176 @@
 
 import SwiftUI
 import OpenAPIURLSession
+struct NoInternetView: View {
+    var body: some View {
+        VStack(spacing: 16) {
+            Image(systemName: "no_internet")
+                .font(.system(size: 60))
+                .foregroundColor(.gray)
+            
+            Text("Нет интернета")
+                .font(.system(size: 20, weight: .bold))
+                .foregroundColor(.ypBlack1)
+        }
+        .frame(maxWidth: .infinity, maxHeight: .infinity)
+        .padding()
+    }
+}
+
+struct ServerErrorView: View {
+    
+    var body: some View {
+        VStack(spacing: 16) {
+            Image(systemName: "server_error")
+                .font(.system(size: 60))
+                .foregroundColor(.gray)
+            
+            Text("Ошибка сервера")
+                .font(.system(size: 20, weight: .bold))
+                .foregroundColor(.ypBlack1)
+        }
+        .frame(maxWidth: .infinity, maxHeight: .infinity)
+        .padding()
+    }
+}
+
 
 struct ContentView: View {
-    var body: some View {
-        VStack {
-            Image(systemName: "globe")
-                .imageScale(.large)
-                .foregroundStyle(.tint)
-            Text("Hello, world!")
+    
+    @State var from: String = ""
+    @State var to: String = ""
+    @State private var isSelectingFrom = false
+    @State private var isSelectingTo = false
+    @State private var isShowingCarrierList = false
+    
+    @State private var navigateToStationSelection = false
+    @State private var selectedCityForStation = ""
+    
+    @State private var hasNoInternet = false
+    @State private var hasServerError = false
+    
+    var isFormFilled: Bool {
+            return !from.isEmpty && !to.isEmpty
         }
-        .padding()
-        .onAppear {
-            testFetchStations()
+    
+    var body: some View {
+        NavigationStack {
+            VStack {
+                HStack(spacing: 12) {
+                    
+                    VStack(spacing: 0) {
+                        
+                        Button(action: {
+                            isSelectingFrom = true
+                        }) {
+                            HStack {
+                                Text(from.isEmpty ? "Откуда" : from)
+                                    .padding(.leading, 1)
+                                    .foregroundColor(from.isEmpty ? .gray : .black)
+                                Spacer()
+                            }
+                            .padding(.vertical, 14)
+                            .padding(.horizontal, 16)
+                        }
+                        
+                        Button(action: {
+                            isSelectingTo = true
+                        }) {
+                            
+                            HStack {
+                                Text(to.isEmpty ? "Куда" : to)
+                                    .padding(.leading, 1)
+                                    .foregroundColor(to.isEmpty ? .gray : .black)
+                                Spacer()
+                            }
+                            .padding(.vertical, 16)
+                            .padding(.horizontal, 16)
+                            
+                        }
+                        
+                        .padding(.trailing, 68)
+                        .cornerRadius(20)
+                        .background(Color.white)
                     }
+                    .frame(maxWidth: .infinity)
+                    .background(Color.white)
+                    .cornerRadius(20)
+                    
+                    Button(action: {
+                        let temp = from
+                        from = to
+                        to = temp
+                        
+                    }) {
+                        Image("change")
+                            .resizable()
+                            .scaledToFit()
+                            .frame(width: 36, height: 36)
+                            .foregroundColor(.ypBlue)
+                            .background(Color.ypWhite)
+                            .cornerRadius(40)
+                        .padding(12)                   }
+                    .cornerRadius(16)
+                }
+                
+                .padding(.horizontal, 16)
+                .padding(.vertical, 16)
+                
+                .background(Color.ypBlue)
+                .cornerRadius(24)
+                .frame(height: 96)
+                .padding(.top, 40)
+                
+                if isFormFilled {
+                    Button(action: {
+                        isShowingCarrierList = true
+                    }) {
+                        Text("Найти")
+                            .font(.system(size: 17, weight: .bold))
+                            .foregroundColor(.white)
+                            .frame(width: 150)
+                            .padding(.vertical, 16)
+                            .background(Color.ypBlue)
+                            .cornerRadius(16)
+                            .padding(.horizontal, 16)
+                    }
+                    .padding(.top, 20)
+                    .transition(.opacity)
+                }
+                
+                Spacer()
+            }
+            
+            .padding(.top, 16)
+            .padding(.horizontal, 16)
+            .background(Color.ypWhite)
+            .navigationBarHidden(true)
+            .navigationDestination(isPresented: $isSelectingFrom) {
+                CitySelectionView(selectedStation: $from)
+            }
+            .navigationDestination(isPresented: $isSelectingTo) {
+                CitySelectionView(selectedStation: $to)
+            }
+            .navigationDestination(isPresented: $isShowingCarrierList) {
+                CarrierListView()
+            }
+            
+            .overlay {
+                if hasNoInternet {
+                    NoInternetView()
+                        .background(Color.ypWhite)
+                        .ignoresSafeArea()
+                } else if hasServerError {
+                    ServerErrorView()
+                        .background(Color.ypWhite)
+                        .ignoresSafeArea()
+                }
+            }
+            
+            .onAppear() {
+                testFetchStations()
+            }
+        }
     }
     // Функция для тестового вызова API
     func testFetchStations() {
