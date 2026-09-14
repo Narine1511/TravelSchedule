@@ -12,7 +12,7 @@ struct CarrierListView: View {
     @Environment(\.dismiss) var dismiss
     @State private var isShowingFilter = false
     
-    @State private var hasCarriers: Bool = false
+    @State private var hasCarriers: Bool = true
     
     var body: some View {
         
@@ -59,15 +59,23 @@ struct CarrierListView: View {
                     ScrollView {
                         LazyVStack(spacing: 16) {
                             ForEach(0..<5) { index in
-                                CarrierCardView(
-                                    carrierName: index % 2 == 0 ? "РЖД" : "ФГК",
-                                    isTransfer: index % 2 == 0,
-                                    date: index % 2 == 0 ? "14 января" : "15 января",
-                                    startTime: "22:30",
-                                    duration: index % 2 == 0 ? "20 часов" : "9 часов",
-                                    endTime: index % 2 == 0 ? "08:15" : "09:00",
-                                    logoName: index % 2 == 0 ? "rzhd_logo" : "fgk_logo")
+                                NavigationLink {
+                                    CarrierInfoView(
+                                        carrier: index % 2 == 0 ? .mockRZD : .mockRZD
+                                    )
+                                } label: {
+                                    CarrierCardView(
+                                        carrierName: index % 2 == 0 ? "РЖД" : "ФГК",
+                                        isTransfer: index % 2 == 0,
+                                        date: index % 2 == 0 ? "14 января" : "15 января",
+                                        startTime: "22:30",
+                                        duration: index % 2 == 0 ? "20 часов" : "9 часов",
+                                        endTime: index % 2 == 0 ? "08:15" : "09:00",
+                                        logoName: index % 2 == 0 ? "rzhd_logo" : "fgk_logo")
+                                }
+                                .buttonStyle(.plain)
                             }
+                            
                         }
                         .padding(.horizontal, 16)
                         .padding(.top, 24)
@@ -77,7 +85,8 @@ struct CarrierListView: View {
             }
         }
         .toolbar(.hidden, for: .tabBar)
-                .navigationBarHidden(true)
+               .navigationBarHidden(true)
+                .navigationTitle("")
             .safeAreaInset(edge: .bottom) {
                 Button(action: {
                     isShowingFilter = true

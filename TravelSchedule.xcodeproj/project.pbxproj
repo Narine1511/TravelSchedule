@@ -73,6 +73,16 @@
 			path = Services;
 			sourceTree = "<group>";
 		};
+		C0A4BE953056627000A290DD /* DataObjects */ = {
+			isa = PBXFileSystemSynchronizedRootGroup;
+			path = DataObjects;
+			sourceTree = "<group>";
+		};
+		C0A4BEA0305663F200A290DD /* Stories */ = {
+			isa = PBXFileSystemSynchronizedRootGroup;
+			path = Stories;
+			sourceTree = "<group>";
+		};
 /* End PBXFileSystemSynchronizedRootGroup section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -105,6 +115,8 @@
 		C055F9D03042DCC500C37E0C = {
 			isa = PBXGroup;
 			children = (
+				C0A4BEA0305663F200A290DD /* Stories */,
+				C0A4BE953056627000A290DD /* DataObjects */,
 				C055FA1C304417DA00C37E0C /* Services */,
 				C055F9DB3042DCC500C37E0C /* TravelSchedule */,
 				C055F9E93042DCC700C37E0C /* TravelScheduleTests */,
@@ -144,6 +156,8 @@
 				C055F9DB3042DCC500C37E0C /* TravelSchedule */,
 				C055FA103044156B00C37E0C /* yaml */,
 				C055FA1C304417DA00C37E0C /* Services */,
+				C0A4BE953056627000A290DD /* DataObjects */,
+				C0A4BEA0305663F200A290DD /* Stories */,
 			);
 			name = TravelSchedule;
 			packageProductDependencies = (

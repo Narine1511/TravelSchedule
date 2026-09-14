@@ -22,19 +22,21 @@ struct MainTabView: View {
     
     var body: some View {
         TabView {
-            ContentView()
-                .tabItem {
-                    Image("Schedule")
-                        .renderingMode(.template)
-                }
+                ContentView()
+                    .tabItem {
+                        Image("Schedule")
+                            .renderingMode(.template)
+                    }
             
-            Text("Экран поездок")
-                .tabItem {
-                    Image("Settings")
-                        .renderingMode(.template)
-                }
-            
+                SettingsView()
+                    .tabItem {
+                        Image("Settings")
+                            .renderingMode(.template)
+                
+                
+            }
         }
+        
         .tint(.ypBlack1)
     }
 }

@@ -40,6 +40,10 @@ struct ServerErrorView: View {
     }
 }
 
+struct StorySelection: Identifiable {
+    let id: Int
+}
+
 
 struct ContentView: View {
     
@@ -55,6 +59,10 @@ struct ContentView: View {
     @State private var hasNoInternet = false
     @State private var hasServerError = false
     
+    private let stories = Story.allStories
+    @State private var selectedStory: StorySelection?
+    @State private var viewedStories: Set<Int> = []
+    
     var isFormFilled: Bool {
             return !from.isEmpty && !to.isEmpty
         }
@@ -62,6 +70,13 @@ struct ContentView: View {
     var body: some View {
         NavigationStack {
             VStack {
+                
+                StoriesStripView(
+                                    stories: stories,
+                                    selectedStory: $selectedStory,
+                                    viewedStories: viewedStories
+                                )
+                                .padding(.top, 8)
                 HStack(spacing: 12) {
                     
                     VStack(spacing: 0) {
@@ -172,6 +187,15 @@ struct ContentView: View {
                         .ignoresSafeArea()
                 }
             }
+            .fullScreenCover(item: $selectedStory) { selection in
+                ContentStoryView(
+                    stories: stories, initialIndex: selection.id,
+                onStoryViewed: { id in
+                                        viewedStories.insert(id)
+                                    }
+                    )
+                .id(selection.id)
+            }
             
             .onAppear() {
                 testFetchStations()
@@ -220,3 +244,5 @@ struct ContentView: View {
 #Preview {
     ContentView()
 }
+
+
