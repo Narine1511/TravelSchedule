@@ -13,7 +13,7 @@ struct MainTabView: View {
         let appearance = UITabBarAppearance()
         appearance.configureWithOpaqueBackground()
         appearance.backgroundColor = .ypWhite
-        appearance.shadowColor = .ypGray.withAlphaComponent(0.3)
+        appearance.shadowColor = .ypGray
         appearance.shadowImage = UIImage()
         UITabBar.appearance().standardAppearance = appearance
                 UITabBar.appearance().scrollEdgeAppearance = appearance
