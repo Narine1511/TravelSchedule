@@ -35,10 +35,10 @@
 /* End PBXFileReference section */
 
 /* Begin PBXFileSystemSynchronizedBuildFileExceptionSet section */
-		C055FAC430459D9A00C37E0C /* Exceptions for "TravelSchedule" folder in "TravelSchedule" target */ = {
+		C0A4BE52305303B300A290DD /* Exceptions for "TravelSchedule" folder in "TravelSchedule" target */ = {
 			isa = PBXFileSystemSynchronizedBuildFileExceptionSet;
 			membershipExceptions = (
-				Assets.xcassets,
+				Info.plist,
 			);
 			target = C055F9D83042DCC500C37E0C /* TravelSchedule */;
 		};
@@ -48,7 +48,7 @@
 		C055F9DB3042DCC500C37E0C /* TravelSchedule */ = {
 			isa = PBXFileSystemSynchronizedRootGroup;
 			exceptions = (
-				C055FAC430459D9A00C37E0C /* Exceptions for "TravelSchedule" folder in "TravelSchedule" target */,
+				C0A4BE52305303B300A290DD /* Exceptions for "TravelSchedule" folder in "TravelSchedule" target */,
 			);
 			path = TravelSchedule;
 			sourceTree = "<group>";
@@ -71,6 +71,16 @@
 		C055FA1C304417DA00C37E0C /* Services */ = {
 			isa = PBXFileSystemSynchronizedRootGroup;
 			path = Services;
+			sourceTree = "<group>";
+		};
+		C0A4BE953056627000A290DD /* DataObjects */ = {
+			isa = PBXFileSystemSynchronizedRootGroup;
+			path = DataObjects;
+			sourceTree = "<group>";
+		};
+		C0A4BEA0305663F200A290DD /* Stories */ = {
+			isa = PBXFileSystemSynchronizedRootGroup;
+			path = Stories;
 			sourceTree = "<group>";
 		};
 /* End PBXFileSystemSynchronizedRootGroup section */
@@ -105,6 +115,8 @@
 		C055F9D03042DCC500C37E0C = {
 			isa = PBXGroup;
 			children = (
+				C0A4BEA0305663F200A290DD /* Stories */,
+				C0A4BE953056627000A290DD /* DataObjects */,
 				C055FA1C304417DA00C37E0C /* Services */,
 				C055F9DB3042DCC500C37E0C /* TravelSchedule */,
 				C055F9E93042DCC700C37E0C /* TravelScheduleTests */,
@@ -144,6 +156,8 @@
 				C055F9DB3042DCC500C37E0C /* TravelSchedule */,
 				C055FA103044156B00C37E0C /* yaml */,
 				C055FA1C304417DA00C37E0C /* Services */,
+				C0A4BE953056627000A290DD /* DataObjects */,
+				C0A4BEA0305663F200A290DD /* Stories */,
 			);
 			name = TravelSchedule;
 			packageProductDependencies = (
@@ -443,11 +457,13 @@
 				CURRENT_PROJECT_VERSION = 1;
 				ENABLE_PREVIEWS = YES;
 				GENERATE_INFOPLIST_FILE = YES;
-				INFOPLIST_KEY_UIApplicationSceneManifest_Generation = YES;
+				INFOPLIST_FILE = TravelSchedule/Info.plist;
+				INFOPLIST_KEY_CFBundleDisplayName = "";
+				INFOPLIST_KEY_LSApplicationCategoryType = "";
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
-				INFOPLIST_KEY_UILaunchScreen_Generation = YES;
-				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPad = "UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
-				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPhone = "UIInterfaceOrientationPortrait UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
+				INFOPLIST_KEY_UISupportedInterfaceOrientations = "Portrait LandscapeLeft LandscapeRight";
+				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPad = "";
+				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPhone = "";
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
@@ -470,11 +486,13 @@
 				CURRENT_PROJECT_VERSION = 1;
 				ENABLE_PREVIEWS = YES;
 				GENERATE_INFOPLIST_FILE = YES;
-				INFOPLIST_KEY_UIApplicationSceneManifest_Generation = YES;
+				INFOPLIST_FILE = TravelSchedule/Info.plist;
+				INFOPLIST_KEY_CFBundleDisplayName = "";
+				INFOPLIST_KEY_LSApplicationCategoryType = "";
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
-				INFOPLIST_KEY_UILaunchScreen_Generation = YES;
-				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPad = "UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
-				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPhone = "UIInterfaceOrientationPortrait UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
+				INFOPLIST_KEY_UISupportedInterfaceOrientations = "Portrait LandscapeLeft LandscapeRight";
+				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPad = "";
+				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPhone = "";
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
