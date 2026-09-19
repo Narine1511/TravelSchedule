@@ -4,27 +4,20 @@
 //
 //  Created by Наринэ  Овсепян on 06.09.2026.
 //
-
 import SwiftUI
 
 struct FilterView: View {
     
-    @State private var isMorningSelected = false
-    @State private var isDaySelected = false
-    @State private var isEveningSelected = false
-    @State private var isNightSelected = false
-    
-    @State private var transferOption: String? = nil
-    
+    @StateObject private var viewModel = FilterViewModel()
     @Environment(\.dismiss) var dismiss
     
-    var hasSelection: Bool {
-        return isMorningSelected || isDaySelected || isEveningSelected || isNightSelected || transferOption != nil
-    }
+    /// Колбэк: вызывается при нажатии "Применить"
+    var onApply: (FilterSettings) -> Void = { _ in }
     
     var body: some View {
         VStack(spacing: 0) {
             
+            // Навбар
             HStack {
                 Button(action: {
                     dismiss()
@@ -36,13 +29,14 @@ struct FilterView: View {
                 .padding(.leading, 16)
                 
                 Spacer()
-                
             }
             .padding(.vertical, 16)
             
+            // Контент
             ScrollView {
                 LazyVStack(spacing: 16) {
                     
+                    // MARK: - Время отправления
                     Text("Время отправления")
                         .font(.system(size: 24, weight: .bold))
                         .foregroundColor(.ypBlack1)
@@ -52,82 +46,11 @@ struct FilterView: View {
                         .frame(maxWidth: .infinity, alignment: .leading)
                         .padding(.horizontal, 16)
                     
-                    HStack {
-                        Text("Утро 06:00 - 12:00")
-                            .font(.system(size: 17, weight: .regular))
-                            .foregroundColor(.ypBlack1)
-                        
-                        Spacer()
-                        
-                        Button(action: {
-                            isMorningSelected.toggle()
-                        }) {
-                            Image(systemName: isMorningSelected ? "checkmark.square.fill" : "square")
-                                .font(.system(size: 20))
-                                .foregroundColor(.ypBlack1)
-                        }
-                        .buttonStyle(.plain)
+                    ForEach(TimeSlot.allCases, id: \.self) { slot in
+                        timeSlotRow(slot)
                     }
-                    .padding(.horizontal, 16)
-                    .padding(.vertical, 12)
                     
-                    HStack {
-                        Text("День 12:00 - 18:00")
-                            .font(.system(size: 17, weight: .regular))
-                            .foregroundColor(.ypBlack1)
-                        
-                        Spacer()
-                        
-                        Button(action: {
-                            isDaySelected.toggle()
-                        }) {
-                            Image(systemName: isDaySelected ? "checkmark.square.fill" : "square")
-                                .font(.system(size: 20))
-                                .foregroundColor(.ypBlack1)
-                        }
-                        .buttonStyle(.plain)
-                    }
-                    .padding(.horizontal, 16)
-                    .padding(.vertical, 12)
-                    
-                    HStack {
-                        Text("Вечер 18:00 - 00:00")
-                            .font(.system(size: 17, weight: .regular))
-                            .foregroundColor(.ypBlack1)
-                        
-                        Spacer()
-                        
-                        Button(action: {
-                            isEveningSelected.toggle()
-                        }) {
-                            Image(systemName: isEveningSelected ? "checkmark.square.fill" : "square")
-                                .font(.system(size: 20))
-                                .foregroundColor(.ypBlack1)
-                        }
-                        .buttonStyle(.plain)
-                    }
-                    .padding(.horizontal, 16)
-                    .padding(.vertical, 12)
-                    
-                    HStack {
-                        Text("Ночь 00:00 - 06:00")
-                            .font(.system(size: 17, weight: .regular))
-                            .foregroundColor(.ypBlack1)
-                        
-                        Spacer()
-                        
-                        Button(action: {
-                            isNightSelected.toggle()
-                        }) {
-                            Image(systemName: isNightSelected ? "checkmark.square.fill" : "square")
-                                .font(.system(size: 20))
-                                .foregroundColor(.ypBlack1)
-                        }
-                        .buttonStyle(.plain)
-                    }
-                    .padding(.horizontal, 16)
-                    .padding(.vertical, 12)
-                    
+                    // MARK: - Пересадки
                     Text("Показывать варианты с пересадками")
                         .font(.system(size: 24, weight: .bold))
                         .foregroundColor(.ypBlack1)
@@ -137,44 +60,9 @@ struct FilterView: View {
                         .frame(maxWidth: .infinity, alignment: .leading)
                         .padding(.horizontal, 16)
                     
-                    HStack {
-                        Text("Да")
-                            .font(.system(size: 17, weight: .regular))
-                            .foregroundColor(.ypBlack1)
-                        
-                        Spacer()
-                        
-                        Button(action: {
-                            transferOption = "Да"
-                        }) {
-                            Image(systemName: transferOption == "Да" ? "largecircle.fill.circle" : "circle")
-                                .font(.system(size: 20))
-                                .foregroundColor(.ypBlack1)
-                        }
-                        .buttonStyle(.plain)
+                    ForEach(TransferOption.allCases, id: \.self) { option in
+                        transferRow(option)
                     }
-                    .padding(.horizontal, 16)
-                    .padding(.vertical, 12)
-                    
-                    HStack {
-                        Text("Нет")
-                            .font(.system(size: 17, weight: .regular))
-                            .foregroundColor(.ypBlack1)
-                        
-                        Spacer()
-                        
-                        Button(action: {
-                            transferOption = "Нет"
-                        }) {
-                            Image(systemName: transferOption == "Нет" ? "largecircle.fill.circle" : "circle")
-                                .font(.system(size: 20))
-                                .foregroundColor(.ypBlack1)
-                        }
-                        .buttonStyle(.plain)
-                    }
-                    .padding(.horizontal, 16)
-                    .padding(.vertical, 12)
-                    
                 }
                 .padding(.top, 0)
                 .padding(.bottom, 120)
@@ -182,10 +70,12 @@ struct FilterView: View {
             .scrollContentBackground(.hidden)
             .background(Color.ypWhite)
         }
-        
+        .background(Color.ypWhite.ignoresSafeArea())
         .safeAreaInset(edge: .bottom) {
-            if hasSelection {
+            if viewModel.hasSelection {
                 Button(action: {
+                    let settings = viewModel.currentSettings()
+                    onApply(settings)                
                     dismiss()
                 }) {
                     Text("Применить")
@@ -193,16 +83,59 @@ struct FilterView: View {
                         .foregroundColor(.white)
                         .padding(.vertical, 16)
                         .padding(.horizontal, 32)
-                        .background(Color.blue)
+                        .background(Color.ypBlue)
                         .cornerRadius(16)
                 }
                 .padding(.horizontal, 16)
                 .padding(.bottom, 8)
             }
         }
-        
         .toolbar(.hidden, for: .tabBar)
         .navigationBarHidden(true)
+    }
+    
+    // MARK: - Строка слота времени
+    private func timeSlotRow(_ slot: TimeSlot) -> some View {
+        HStack {
+            Text(slot.displayText)
+                .font(.system(size: 17, weight: .regular))
+                .foregroundColor(.ypBlack1)
+            
+            Spacer()
+            
+            Button(action: {
+                viewModel.toggleTimeSlot(slot)
+            }) {
+                Image(systemName: viewModel.isSelected(slot) ? "checkmark.square.fill" : "square")
+                    .font(.system(size: 20))
+                    .foregroundColor(.ypBlack1)
+            }
+            .buttonStyle(.plain)
+        }
+        .padding(.horizontal, 16)
+        .padding(.vertical, 12)
+    }
+    
+    // MARK: - Строка пересадок
+    private func transferRow(_ option: TransferOption) -> some View {
+        HStack {
+            Text(option.rawValue)
+                .font(.system(size: 17, weight: .regular))
+                .foregroundColor(.ypBlack1)
+            
+            Spacer()
+            
+            Button(action: {
+                viewModel.selectTransfer(option)
+            }) {
+                Image(systemName: viewModel.isTransferSelected(option) ? "largecircle.fill.circle" : "circle")
+                    .font(.system(size: 20))
+                    .foregroundColor(.ypBlack1)
+            }
+            .buttonStyle(.plain)
+        }
+        .padding(.horizontal, 16)
+        .padding(.vertical, 12)
     }
 }
 

@@ -9,28 +9,41 @@ import SwiftUI
 
 struct StationSelectionView: View {
     let cityName: String
-    @Binding var selectedStation: String
+    @Binding var stationTitle: String
+    @Binding var stationCode: String
     
-    @State private var searchText = ""
+    /* @State private var searchText = ""*/
+    @StateObject private var viewModel: StationSelectionViewModel
     @Environment(\.dismiss) var dismiss
     
-    let stations = [
-        "Киевский вокзал",
-        "Курский вокзал",
-        "Ярославский вокзал",
-        "Белорусский вокзал",
-        "Савеловский вокзал",
-        "Ленинградский вокзал"
-    ]
-    
-    
-    var filteredStations: [String] {
-        if searchText.isEmpty {
-            return stations
-        } else {
-            return stations.filter { $0.localizedCaseInsensitiveContains(searchText) }
-        }
+    init(
+        cityName: String,
+        stationTitle: Binding<String>,
+        stationCode: Binding<String>
+    ) {
+        self.cityName = cityName
+        self._stationTitle = stationTitle
+        self._stationCode = stationCode
+        _viewModel = StateObject(wrappedValue: StationSelectionViewModel(cityName: cityName))
     }
+    
+    /*  let stations = [
+     "Киевский вокзал",
+     "Курский вокзал",
+     "Ярославский вокзал",
+     "Белорусский вокзал",
+     "Савеловский вокзал",
+     "Ленинградский вокзал"
+     ]*/
+    
+    
+    /*   var filteredStations: [String] {
+     if searchText.isEmpty {
+     return stations
+     } else {
+     return stations.filter { $0.localizedCaseInsensitiveContains(searchText) }
+     }
+     }*/
     
     var body: some View {
         NavigationStack {
@@ -65,13 +78,13 @@ struct StationSelectionView: View {
                         .foregroundColor(.gray)
                         .font(.system(size: 18))
                     
-                    TextField("Введите запрос", text: $searchText)
+                    TextField("Введите запрос", text: $viewModel.searchText)
                         .foregroundColor(.ypBlack2)
                         .autocorrectionDisabled()
                     
-                    if !searchText.isEmpty {
+                    if !viewModel.searchText.isEmpty {
                         Button(action: {
-                            searchText = ""
+                            viewModel.searchText = ""
                         }) {
                             Image(systemName: "xmark.circle.fill")
                                 .foregroundColor(.gray)
@@ -85,59 +98,85 @@ struct StationSelectionView: View {
                 .padding(.horizontal, 16)
                 .padding(.bottom, 16)
                 
-                // Список станций
-                List {
+                if viewModel.isLoading {
+                    ProgressView()
+                        .scaleEffect(1)
+                        .tint(.gray)
+                        .frame(maxWidth: .infinity, maxHeight: .infinity)
                     
-                    if filteredStations.isEmpty {
-                        VStack(spacing: 16) {
-                            Text("Станция не найдена")
-                                .font(.system(size: 24, weight: .bold))
-                            .foregroundColor(.ypBlack1)}
+                } else if viewModel.filteredStations.isEmpty {
+                    VStack(spacing: 16) {
+                        Text("Станция не найдена")
+                            .font(.system(size: 24, weight: .bold))
+                            .foregroundColor(.ypBlack1)
+                    }
+                    .frame(maxWidth: .infinity, maxHeight: .infinity)
+                    
+                } else {
+                    
+                    // Список станций
+                    List {
                         
-                        .frame(maxWidth: .infinity)
-                        .background(Color.ypWhite)
-                        .padding(.top, 176)
-                        .listRowSeparator(.hidden)
-                        /*.listRowBackground(Color.clear)*/
-                    } else {
-                        
-                        ForEach(filteredStations, id: \.self) { station in
-                            Button(action: {
-                                selectedStation = "\(cityName) (\(station))"
-                                dismiss()
-                                DispatchQueue.main.asyncAfter(deadline: .now() + 0.3) {
-                                    dismiss()
-                                }
-                            }) {
-                                HStack {
-                                    Text(station)
-                                        .foregroundColor(.ypBlack2)
-                                        .font(.system(size: 17))
-                                    
-                                    Spacer()
-                                    Image(systemName: "chevron.right")
-                                        .foregroundColor(.ypBlack2)
-                                        .font(.system(size: 14))
-                                }
-                                .padding(.vertical, 8)
-                            }
-                            .listRowBackground(Color.ypWhite)
+                        if viewModel.filteredStations.isEmpty {
+                            VStack(spacing: 16) {
+                                Text("Станция не найдена")
+                                    .font(.system(size: 24, weight: .bold))
+                                .foregroundColor(.ypBlack1)}
+                            
+                            .frame(maxWidth: .infinity)
+                            .background(Color.ypWhite)
+                            .padding(.top, 176)
                             .listRowSeparator(.hidden)
+                            /*.listRowBackground(Color.clear)*/
+                        } else {
+                            
+                            ForEach(Array(viewModel.filteredStations.enumerated()), id: \.offset) { _, station in
+                                Button(action: {
+                                    stationTitle = station.title ?? ""
+                                    stationCode = station.codes?.yandex_code ?? ""
+                                    dismiss()
+                                    /*DispatchQueue.main.asyncAfter(deadline: .now() + 0.3) {
+                                     dismiss()
+                                     }*/
+                                }) {
+                                    HStack {
+                                        Text(station.title ?? "Без названия")
+                                            .foregroundColor(.ypBlack2)
+                                            .font(.system(size: 17))
+                                        
+                                        Spacer()
+                                        Image(systemName: "chevron.right")
+                                            .foregroundColor(.ypBlack2)
+                                            .font(.system(size: 14))
+                                    }
+                                    .padding(.vertical, 8)
+                                }
+                                .listRowBackground(Color.ypWhite)
+                                .listRowSeparator(.hidden)
+                            }
                         }
                     }
+                    .listRowBackground(Color.ypWhite)
+                    .listStyle(.plain)
+                    .scrollContentBackground(.hidden)
                 }
-                .listRowBackground(Color.ypWhite)
-                .listStyle(.plain)
-                .scrollContentBackground(.hidden)
             }
+            
             .background(Color.ypWhite)
             .navigationBarHidden(true)
             .navigationBarBackButtonHidden(true)
             .toolbar(.hidden, for: .tabBar)
         }
+        .task {
+            await viewModel.loadStations()
+        }
     }
 }
 
 #Preview {
-    StationSelectionView(cityName: "Москва", selectedStation: .constant("Киевский вокзал"))
+    StationSelectionView(
+        cityName: "Москва",
+        stationTitle: .constant(""),
+        stationCode: .constant("")
+    )
 }

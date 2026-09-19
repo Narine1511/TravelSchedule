@@ -425,6 +425,9 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/AllStationsResponse'
+            text/html:
+              schema:
+                $ref: '#/components/schemas/AllStationsResponse'
                 
   /v3.0/copyright/:
     get:
@@ -515,12 +518,16 @@ components:
           $ref: '#/components/schemas/Station'
         departure:
           type: string
-          format: date-time
+          format: time
           description: Время отправления
         arrival:
           type: string
-          format: date-time
+          format: time
           description: Время прибытия
+        start_date:
+          type: string
+          format: date
+          description: Дата отправления рейса (YYYY-MM-DD)
         thread:
           $ref: '#/components/schemas/Thread'
         tickets_info:
@@ -621,14 +628,18 @@ components:
         except_days:
           type: string
           description: Дни, когда рейс не выполняется
-        arrival:
-          type: string
-          format: date-time
-          description: Время прибытия в формате ISO 8601
         departure:
           type: string
-          format: date-time
-          description: Время отправления в формате ISO 8601
+          format: time
+          description: Время отправления
+        arrival:
+          type: string
+          format: time
+          description: Время прибытия
+        start_date:
+          type: string
+          format: date
+          description: Дата отправления рейса (YYYY-MM-DD)
         thread:
           $ref: '#/components/schemas/Thread'
         days:
@@ -716,10 +727,10 @@ components:
       properties:
         arrival:
           type: string
-          format: date-time
+          format: time
         departure:
           type: string
-          format: date-time
+          format: time
         stop_time:
           type: integer
           description: Продолжительность остановки в секундах

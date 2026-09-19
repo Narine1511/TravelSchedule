@@ -13,7 +13,7 @@ struct MainTabView: View {
         let appearance = UITabBarAppearance()
         appearance.configureWithOpaqueBackground()
         appearance.backgroundColor = .ypWhite
-        appearance.shadowColor = .ypGray.withAlphaComponent(0.3)
+        appearance.shadowColor = .ypGray
         appearance.shadowImage = UIImage()
         UITabBar.appearance().standardAppearance = appearance
                 UITabBar.appearance().scrollEdgeAppearance = appearance
@@ -22,19 +22,21 @@ struct MainTabView: View {
     
     var body: some View {
         TabView {
-            ContentView()
-                .tabItem {
-                    Image("Schedule")
-                        .renderingMode(.template)
-                }
+                ContentView()
+                    .tabItem {
+                        Image("Schedule")
+                            .renderingMode(.template)
+                    }
             
-            Text("Экран поездок")
-                .tabItem {
-                    Image("Settings")
-                        .renderingMode(.template)
-                }
-            
+                SettingsView()
+                    .tabItem {
+                        Image("Settings")
+                            .renderingMode(.template)
+                
+                
+            }
         }
+        
         .tint(.ypBlack1)
     }
 }

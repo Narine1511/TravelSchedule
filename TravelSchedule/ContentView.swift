@@ -40,11 +40,19 @@ struct ServerErrorView: View {
     }
 }
 
+struct StorySelection: Identifiable {
+    let id: Int
+}
+
 
 struct ContentView: View {
     
-    @State var from: String = ""
-    @State var to: String = ""
+   /* @State var from: String = ""
+    @State var to: String = ""*/
+    
+    @StateObject private var viewModel = MainViewModel()
+    
+    // UI-состояния
     @State private var isSelectingFrom = false
     @State private var isSelectingTo = false
     @State private var isShowingCarrierList = false
@@ -55,13 +63,24 @@ struct ContentView: View {
     @State private var hasNoInternet = false
     @State private var hasServerError = false
     
-    var isFormFilled: Bool {
+    private let stories = Story.allStories
+    @State private var selectedStory: StorySelection?
+    @State private var viewedStories: Set<Int> = []
+    
+ /*   var isFormFilled: Bool {
             return !from.isEmpty && !to.isEmpty
-        }
+        }*/
     
     var body: some View {
         NavigationStack {
             VStack {
+                
+                StoriesStripView(
+                                    stories: stories,
+                                    selectedStory: $selectedStory,
+                                    viewedStories: viewedStories
+                                )
+                                .padding(.top, 8)
                 HStack(spacing: 12) {
                     
                     VStack(spacing: 0) {
@@ -70,9 +89,9 @@ struct ContentView: View {
                             isSelectingFrom = true
                         }) {
                             HStack {
-                                Text(from.isEmpty ? "Откуда" : from)
+                                Text(viewModel.from.isEmpty ? "Откуда" : viewModel.from)
                                     .padding(.leading, 1)
-                                    .foregroundColor(from.isEmpty ? .gray : .black)
+                                    .foregroundColor(viewModel.from.isEmpty ? .gray : .black)
                                 Spacer()
                             }
                             .padding(.vertical, 14)
@@ -84,9 +103,9 @@ struct ContentView: View {
                         }) {
                             
                             HStack {
-                                Text(to.isEmpty ? "Куда" : to)
+                                Text(viewModel.to.isEmpty ? "Куда" : viewModel.to)
                                     .padding(.leading, 1)
-                                    .foregroundColor(to.isEmpty ? .gray : .black)
+                                    .foregroundColor(viewModel.to.isEmpty ? .gray : .black)
                                 Spacer()
                             }
                             .padding(.vertical, 16)
@@ -103,9 +122,7 @@ struct ContentView: View {
                     .cornerRadius(20)
                     
                     Button(action: {
-                        let temp = from
-                        from = to
-                        to = temp
+                        viewModel.swapStations()
                         
                     }) {
                         Image("change")
@@ -127,9 +144,12 @@ struct ContentView: View {
                 .frame(height: 96)
                 .padding(.top, 40)
                 
-                if isFormFilled {
+                if viewModel.isFormFilled {
                     Button(action: {
-                        isShowingCarrierList = true
+                        Task {
+                            await viewModel.search()
+                                    isShowingCarrierList = true
+                        }
                     }) {
                         Text("Найти")
                             .font(.system(size: 17, weight: .bold))
@@ -152,13 +172,16 @@ struct ContentView: View {
             .background(Color.ypWhite)
             .navigationBarHidden(true)
             .navigationDestination(isPresented: $isSelectingFrom) {
-                CitySelectionView(selectedStation: $from)
+                CitySelectionView(selectedStation: $viewModel.from,
+                                  selectedStationCode: $viewModel.fromCode)
             }
             .navigationDestination(isPresented: $isSelectingTo) {
-                CitySelectionView(selectedStation: $to)
+                CitySelectionView(selectedStation: $viewModel.to,
+                                  selectedStationCode: $viewModel.toCode)
             }
             .navigationDestination(isPresented: $isShowingCarrierList) {
-                CarrierListView()
+                /*CarrierListView()*/
+                CarrierListView(searchResults: viewModel.searchResults, routeTitle: "\(viewModel.from) → \(viewModel.to)")
             }
             
             .overlay {
@@ -172,14 +195,23 @@ struct ContentView: View {
                         .ignoresSafeArea()
                 }
             }
-            
-            .onAppear() {
-                testFetchStations()
+            .fullScreenCover(item: $selectedStory) { selection in
+                ContentStoryView(
+                    stories: stories, initialIndex: selection.id,
+                onStoryViewed: { id in
+                                        viewedStories.insert(id)
+                                    }
+                    )
+                .id(selection.id)
             }
+            
+           /* .onAppear() {
+                testFetchStations()
+            }*/
         }
     }
     // Функция для тестового вызова API
-    func testFetchStations() {
+/*    func testFetchStations() {
         // Создаём Task для выполнения асинхронного кода
         Task {
             do {
@@ -214,9 +246,11 @@ struct ContentView: View {
                 // В реальном приложении здесь должна быть логика обработки ошибок (показ алерта и т. д.)
             }
         }
-    }
+    }*/
 }
 
 #Preview {
     ContentView()
 }
+
+
