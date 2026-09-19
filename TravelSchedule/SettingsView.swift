@@ -8,7 +8,8 @@
 import SwiftUI
 
 struct SettingsView: View {
-    @AppStorage("isDarkThemeEnabled") private var isDarkThemeEnabled = false
+    /* @AppStorage("isDarkThemeEnabled") private var isDarkThemeEnabled = false*/
+    @StateObject private var viewModel = SettingsViewModel()
     
     var body: some View {
         NavigationStack {
@@ -23,7 +24,7 @@ struct SettingsView: View {
                         
                         Spacer()
                         
-                        Toggle("", isOn: $isDarkThemeEnabled)
+                        Toggle("", isOn: $viewModel.isDarkThemeEnabled)
                             .labelsHidden()
                             .tint(.ypBlue)
                     }
@@ -51,8 +52,8 @@ struct SettingsView: View {
                 Spacer()
                 
                 VStack(spacing: 6) {
-                    Text("Приложение использует API «Яндекс.Расписания»")
-                    Text("Версия 1.0 (beta)")
+                    Text(viewModel.apiInfoText)
+                    Text(viewModel.versionText)
                 }
                 .font(.system(size: 12, weight: .regular))
                 .foregroundColor(.ypBlack2)

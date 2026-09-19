@@ -100,8 +100,8 @@ struct StationSelectionView: View {
                 
                 if viewModel.isLoading {
                     ProgressView()
-                        .scaleEffect(1.5)
-                        .tint(.ypBlue)
+                        .scaleEffect(1)
+                        .tint(.gray)
                         .frame(maxWidth: .infinity, maxHeight: .infinity)
                     
                 } else if viewModel.filteredStations.isEmpty {

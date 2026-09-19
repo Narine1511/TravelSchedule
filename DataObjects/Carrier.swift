@@ -13,12 +13,15 @@ struct Carrier: Identifiable, Hashable {
     let logoURL: URL?
     let email: String
     let phone: String
+}
 
-    static let mockRZD = Carrier(
-            id: "rzd",
-            name: "ОАО «РЖД»",
-            logoURL: nil,
-            email: "i.logzkina@yandex.ru",
-            phone: "+7 (904) 329-27-71"
+    extension Carrier {
+        static let mockRZD = Carrier(
+            id: "112",
+            name: "РЖД/ФПК",
+            logoURL: URL(string: "https://yastat.net/s3/rasp/media/data/company/logo/logo.gif"),
+            email: "мокinfo@rzd.ru",
+            phone: "+7 (800) 775-00-00",
+            
         )
     }
