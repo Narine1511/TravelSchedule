@@ -146,9 +146,9 @@ struct ContentView: View {
                 
                 if viewModel.isFormFilled {
                     Button(action: {
-                        isShowingCarrierList = true
                         Task {
                             await viewModel.search()
+                                    isShowingCarrierList = true
                         }
                     }) {
                         Text("Найти")

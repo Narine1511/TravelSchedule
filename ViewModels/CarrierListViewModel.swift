@@ -233,65 +233,53 @@ import SwiftUI
 final class CarrierListViewModel: ObservableObject {
     
     @Published var carriers: [CarrierCellModel] = []
-    @Published var isLoading: Bool = false
+    @Published var isLoading: Bool = true
     @Published var errorMessage: String?
-    
-    private let networkClient = NetworkClient.shared
     
     var hasCarriers: Bool {
         !carriers.isEmpty
     }
     
+    // MARK: - Загрузка
     func loadCarriers(from segments: [Components.Schemas.Segment]) async {
         isLoading = true
         errorMessage = nil
         
+        // 🧪 для теста
+        try? await Task.sleep(nanoseconds: 500_000_000)
+        
         self.carriers = segments.map { segment in
-            makeCellModel(from: segment)
+            return makeCellModel(from: segment)          // 👈 return
         }
         
         print("🚗 Загружено перевозчиков: \(carriers.count)")
+        for c in carriers {
+            print("🚗 '\(c.carrierName)', date='\(c.date)', start='\(c.startTime)', dur='\(c.duration)', end='\(c.endTime)'")
+        }
         
         isLoading = false
     }
     
-    // MARK: - Преобразование Segment → CarrierCellModel
+    // MARK: - makeCellModel
     private func makeCellModel(from segment: Components.Schemas.Segment) -> CarrierCellModel {
-        CarrierCellModel(
+        return CarrierCellModel(                          // 👈 return
             carrierName: segment.thread?.carrier?.title ?? "Перевозчик",
             isTransfer: false,
             date: formatDate(segment.start_date),
             startTime: formatTime(segment.departure),
             duration: formatDuration(segment.duration),
             endTime: formatTime(segment.arrival),
-            logoName: "rzhd_logo"
+            logoURL: URL(string: segment.thread?.carrier?.logo ?? "")
         )
     }
-    // MARK: - Helpers
     
-    /// Склеивает дату "2026-10-21" и время "22:18:00" в строку "2026-10-21T22:18:00"
-    private func combine(date: String?, time: String?) -> String? {
-        guard let date, let time else { return nil }
-        return "\(date)T\(time)"
-    }
-    
-    /// Парсит строку "yyyy-MM-dd'T'HH:mm:ss" в Date
-    private func parseDate(_ isoString: String?) -> Date? {
-        guard let isoString else { return nil }
-        
-        let formatter = DateFormatter()
-        formatter.dateFormat = "yyyy-MM-dd'T'HH:mm:ss"
-        formatter.locale = Locale(identifier: "en_US_POSIX")
-        formatter.timeZone = TimeZone(identifier: "Europe/Moscow")
-        return formatter.date(from: isoString)
-    }
-    
+    // MARK: - Форматтеры
     private func formatTime(_ timeString: String?) -> String {
         guard let timeString, timeString.count >= 5 else { return "--:--" }
         let index = timeString.index(timeString.startIndex, offsetBy: 5)
         return String(timeString[..<index])
     }
-
+    
     private func formatDate(_ dateString: String?) -> String {
         guard let dateString else { return "" }
         
@@ -305,8 +293,6 @@ final class CarrierListViewModel: ObservableObject {
         outputFormatter.locale = Locale(identifier: "ru_RU")
         return outputFormatter.string(from: date)
     }
-    
-
     
     private func formatDuration(_ seconds: Int?) -> String {
         guard let seconds else { return "" }
@@ -328,5 +314,5 @@ struct CarrierCellModel: Identifiable {
     let startTime: String
     let duration: String
     let endTime: String
-    let logoName: String
+    let logoURL: URL?
 }

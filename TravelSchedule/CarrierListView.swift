@@ -303,9 +303,23 @@ struct CarrierCardView: View {
     var body: some View {
         VStack(alignment: .leading, spacing: 12) {
             HStack(alignment: .top) {
-                Image(cell.logoName)
+                AsyncImage(url: cell.logoURL) { phase in
+                                    switch phase {
+                                    case .success(let image):
+                                        image
+                                            .resizable()
+                                            .scaledToFit()
+                                    case .empty:
+                                        ProgressView()
+                                    case .failure:
+                                        placeholderLogo
+                                    @unknown default:
+                                        placeholderLogo
+                                    }
+                                }
+                /* Image(cell.logoName)
                     .resizable()
-                    .scaledToFit()
+                    .scaledToFit()*/
                     .frame(width: 40, height: 40)
                     .clipShape(RoundedRectangle(cornerRadius: 8))
                 
@@ -356,7 +370,15 @@ struct CarrierCardView: View {
         .background(Color.gray.opacity(0.08))
         .cornerRadius(16)
     }
-}
+    private var placeholderLogo: some View {
+            RoundedRectangle(cornerRadius: 8)
+                .fill(Color.gray.opacity(0.2))
+                .overlay(
+                    Image(systemName: "tram")
+                        .foregroundColor(.gray)
+                )
+        }
+    }
 
 #Preview {
     NavigationStack {
