@@ -425,6 +425,9 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/AllStationsResponse'
+            text/html:
+              schema:
+                $ref: '#/components/schemas/AllStationsResponse'
                 
   /v3.0/copyright/:
     get:

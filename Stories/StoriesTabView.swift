@@ -16,9 +16,9 @@ struct StoriesTabView: View {
         .tabViewStyle(PageTabViewStyle(indexDisplayMode: .never))
     }
 
-    func didTapStory() {
+    /*func didTapStory() {
         currentStoryIndex = min(currentStoryIndex + 1, stories.count - 1)
-    }
+    }*/
     
     private var tapZones: some View {
             HStack(spacing: 0) {

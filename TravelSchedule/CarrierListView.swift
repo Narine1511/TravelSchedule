@@ -8,11 +8,14 @@
 import SwiftUI
 
 struct CarrierListView: View {
-    let routeTitle: String = "Москва (Ярославский вокзал) → Санкт Петербург (Балтийский вокзал)"
+    /*let routeTitle: String = "Москва (Ярославский вокзал) → Санкт Петербург (Балтийский вокзал)"
+     @State private var hasCarriers: Bool = true*/
+    let searchResults: [Components.Schemas.Segment]
+    let routeTitle: String = "..."
     @Environment(\.dismiss) var dismiss
     @State private var isShowingFilter = false
     
-    @State private var hasCarriers: Bool = true
+    @StateObject private var viewModel = CarrierListViewModel()
     
     var body: some View {
         
@@ -35,7 +38,7 @@ struct CarrierListView: View {
                 .padding(.leading, 16)
                 Spacer()
                 
-                Text(routeTitle)
+                Text(viewModel.routeTitle)
                     .font(.system(size: 20, weight: .bold))
                     .foregroundColor(.ypBlack1)
                     .padding(.top, 24)
@@ -43,7 +46,7 @@ struct CarrierListView: View {
                     .padding(.horizontal, 16)
                 
                 
-                if !hasCarriers {
+                if !viewModel.hasCarriers {
                     // Пустое состояние
                     VStack(spacing: 16) {
                         
@@ -58,20 +61,12 @@ struct CarrierListView: View {
                     
                     ScrollView {
                         LazyVStack(spacing: 16) {
-                            ForEach(0..<5) { index in
+                            ForEach(viewModel.carriers) { carrier in
                                 NavigationLink {
                                     CarrierInfoView(
-                                        carrier: index % 2 == 0 ? .mockRZD : .mockRZD
-                                    )
+                                        carrier: .mockRZD)
                                 } label: {
-                                    CarrierCardView(
-                                        carrierName: index % 2 == 0 ? "РЖД" : "ФГК",
-                                        isTransfer: index % 2 == 0,
-                                        date: index % 2 == 0 ? "14 января" : "15 января",
-                                        startTime: "22:30",
-                                        duration: index % 2 == 0 ? "20 часов" : "9 часов",
-                                        endTime: index % 2 == 0 ? "08:15" : "09:00",
-                                        logoName: index % 2 == 0 ? "rzhd_logo" : "fgk_logo")
+                                    CarrierCardView(cell: carrier)
                                 }
                                 .buttonStyle(.plain)
                             }
@@ -85,103 +80,99 @@ struct CarrierListView: View {
             }
         }
         .toolbar(.hidden, for: .tabBar)
-               .navigationBarHidden(true)
-                .navigationTitle("")
-            .safeAreaInset(edge: .bottom) {
-                Button(action: {
-                    isShowingFilter = true
-                }) {
-                    Text("Уточнить время")
-                        .font(.system(size: 17, weight: .bold))
-                        .foregroundColor(.white)
-                        .frame(maxWidth: .infinity)
-                        .padding(.vertical, 16)
-                        .background(Color.ypBlue)
-                        .cornerRadius(16)
-                }
-                .padding(.horizontal, 16)
-                .padding(.bottom, 8)
-                .background(
-                    LinearGradient(
-                        gradient: Gradient(colors: [Color(UIColor.ypWhite).opacity(0), Color(UIColor.ypWhite)]),
-                        startPoint: .top,
-                        endPoint: .bottom
-                    )
+        .navigationBarHidden(true)
+        .navigationTitle("")
+        .safeAreaInset(edge: .bottom) {
+            Button(action: {
+                isShowingFilter = true
+            }) {
+                Text("Уточнить время")
+                    .font(.system(size: 17, weight: .bold))
+                    .foregroundColor(.white)
+                    .frame(maxWidth: .infinity)
+                    .padding(.vertical, 16)
+                    .background(Color.ypBlue)
+                    .cornerRadius(16)
+            }
+            .padding(.horizontal, 16)
+            .padding(.bottom, 8)
+            .background(
+                LinearGradient(
+                    gradient: Gradient(colors: [Color(UIColor.ypWhite).opacity(0), Color(UIColor.ypWhite)]),
+                    startPoint: .top,
+                    endPoint: .bottom
                 )
-            }
-            .navigationDestination(isPresented: $isShowingFilter) {
-                FilterView()
-                
-            }
+            )
+        }
+        .task {
+            await viewModel.loadCarriers()
+            
+        }
+        .navigationDestination(isPresented: $isShowingFilter) {
+            FilterView()
+        }
     }
 }
 
 struct CarrierCardView: View {
-    let carrierName: String
-    let isTransfer: Bool
-    let date: String
-    let startTime: String
-    let duration: String
-    let endTime: String
-    let logoName: String
+    let cell: CarrierCellModel
     
     var body: some View {
-            VStack(alignment: .leading, spacing: 12) {
-                HStack(alignment: .top) {
-                    Image(logoName)
-                                        .resizable()
-                                        .scaledToFit()
-                                        .frame(width: 40, height: 40)
-                                        .clipShape(RoundedRectangle(cornerRadius: 8))
-                                    
-                                    VStack(alignment: .leading, spacing: 4) {
-                                        Text(carrierName)
-                                            .font(.system(size: 17, weight: .semibold))
-                                            .foregroundColor(.ypBlack1)
-                                        
-                                        if isTransfer {
-                                            Text("С пересадкой в Костроме")
-                                                .font(.system(size: 13))
-                                                .foregroundColor(.red)
-                                        }
-                                    }
-                    Spacer()
-                                    
-                                    Text(date)
-                                        .font(.system(size: 13))
-                                        .foregroundColor(.gray)
-                                }
-                HStack(spacing: 0) {
-                                Text(startTime)
-                                    .font(.system(size: 20, weight: .bold))
-                                    .foregroundColor(.ypBlack1)
-                    HStack(spacing: 4) {
-                                        Rectangle()
-                                            .fill(Color.gray.opacity(0.3))
-                                            .frame(height: 1)
-                                        
-                                        Text(duration)
-                                            .font(.system(size: 13))
-                                            .foregroundColor(.gray)
-                                        
-                                        Rectangle()
-                                            .fill(Color.gray.opacity(0.3))
-                                            .frame(height: 1)
-                                    }
-                                    .padding(.horizontal, 8)
-                                    
-                                    Text(endTime)
-                                        .font(.system(size: 20, weight: .bold))
-                                        .foregroundColor(.ypBlack1)
-                                }
-                            }
-            .padding(16)
-                    .background(Color.gray.opacity(0.08))
-                    .cornerRadius(16)
-                        }
-    
+        VStack(alignment: .leading, spacing: 12) {
+            HStack(alignment: .top) {
+                Image(cell.logoName)
+                    .resizable()
+                    .scaledToFit()
+                    .frame(width: 40, height: 40)
+                    .clipShape(RoundedRectangle(cornerRadius: 8))
+                
+                VStack(alignment: .leading, spacing: 4) {
+                    Text(cell.carrierName)
+                        .font(.system(size: 17, weight: .semibold))
+                        .foregroundColor(.ypBlack1)
+                    
+                    if cell.isTransfer {
+                        Text("С пересадкой в Костроме")
+                            .font(.system(size: 13))
+                            .foregroundColor(.red)
                     }
-
+                }
+                Spacer()
+                
+                Text(cell.date)
+                    .font(.system(size: 13))
+                    .foregroundColor(.gray)
+            }
+            HStack(spacing: 0) {
+                Text(cell.startTime)
+                    .font(.system(size: 20, weight: .bold))
+                    .foregroundColor(.ypBlack1)
+                HStack(spacing: 4) {
+                    Rectangle()
+                        .fill(Color.gray.opacity(0.3))
+                        .frame(height: 1)
+                    
+                    Text(cell.duration)
+                        .font(.system(size: 13))
+                        .foregroundColor(.gray)
+                    
+                    Rectangle()
+                        .fill(Color.gray.opacity(0.3))
+                        .frame(height: 1)
+                }
+                .padding(.horizontal, 8)
+                
+                Text(cell.endTime)
+                    .font(.system(size: 20, weight: .bold))
+                    .foregroundColor(.ypBlack1)
+            }
+        }
+        .padding(16)
+        .background(Color.gray.opacity(0.08))
+        .cornerRadius(16)
+    }
+    
+}
 #Preview {
-    CarrierListView()
+    CarrierListView(searchResults: [])
 }
