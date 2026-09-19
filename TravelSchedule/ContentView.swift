@@ -181,7 +181,7 @@ struct ContentView: View {
             }
             .navigationDestination(isPresented: $isShowingCarrierList) {
                 /*CarrierListView()*/
-                CarrierListView(searchResults: viewModel.searchResults)
+                CarrierListView(searchResults: viewModel.searchResults, routeTitle: "\(viewModel.from) → \(viewModel.to)")
             }
             
             .overlay {

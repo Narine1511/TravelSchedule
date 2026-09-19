@@ -101,6 +101,25 @@ actor NetworkClient {
         offset: Int? = nil,
         limit: Int? = nil
     ) async throws -> SearchResponse {
+        
+        
+        
+        var components = URLComponents(string: "https://api.rasp.yandex.net/v3.0/search/")!
+            components.queryItems = [
+                URLQueryItem(name: "apikey", value: Constants.apiKey),
+                URLQueryItem(name: "from", value: from),
+                URLQueryItem(name: "to", value: to),
+                URLQueryItem(name: "format", value: "json"),
+                URLQueryItem(name: "lang", value: "ru_RU"),
+            ]
+            if let date = date {
+                components.queryItems?.append(URLQueryItem(name: "date", value: date))
+            }
+            
+            let debugURL = components.url?.absoluteString ?? "nil"
+            print("🌐 URL: \(debugURL)")
+        
+        
         let response = try await client.getSchedualBetweenStations(query: .init(
             apikey: Constants.apiKey,
             from: from,
@@ -110,6 +129,10 @@ actor NetworkClient {
             offset: offset,
             limit: limit
         ))
+        
+        
+        let json = try response.ok.body.json
+        print("📦 Response: \(json)")
         return try response.ok.body.json
     }
     

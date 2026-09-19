@@ -12,38 +12,38 @@ struct StationSelectionView: View {
     @Binding var stationTitle: String
     @Binding var stationCode: String
     
-   /* @State private var searchText = ""*/
+    /* @State private var searchText = ""*/
     @StateObject private var viewModel: StationSelectionViewModel
     @Environment(\.dismiss) var dismiss
     
     init(
-            cityName: String,
-            stationTitle: Binding<String>,
-            stationCode: Binding<String>
-        ) {
-            self.cityName = cityName
-            self._stationTitle = stationTitle
-            self._stationCode = stationCode
-            _viewModel = StateObject(wrappedValue: StationSelectionViewModel(cityName: cityName))
-        }
+        cityName: String,
+        stationTitle: Binding<String>,
+        stationCode: Binding<String>
+    ) {
+        self.cityName = cityName
+        self._stationTitle = stationTitle
+        self._stationCode = stationCode
+        _viewModel = StateObject(wrappedValue: StationSelectionViewModel(cityName: cityName))
+    }
     
-  /*  let stations = [
-        "Киевский вокзал",
-        "Курский вокзал",
-        "Ярославский вокзал",
-        "Белорусский вокзал",
-        "Савеловский вокзал",
-        "Ленинградский вокзал"
-    ]*/
+    /*  let stations = [
+     "Киевский вокзал",
+     "Курский вокзал",
+     "Ярославский вокзал",
+     "Белорусский вокзал",
+     "Савеловский вокзал",
+     "Ленинградский вокзал"
+     ]*/
     
     
- /*   var filteredStations: [String] {
-        if searchText.isEmpty {
-            return stations
-        } else {
-            return stations.filter { $0.localizedCaseInsensitiveContains(searchText) }
-        }
-    }*/
+    /*   var filteredStations: [String] {
+     if searchText.isEmpty {
+     return stations
+     } else {
+     return stations.filter { $0.localizedCaseInsensitiveContains(searchText) }
+     }
+     }*/
     
     var body: some View {
         NavigationStack {
@@ -129,15 +129,15 @@ struct StationSelectionView: View {
                             .listRowSeparator(.hidden)
                             /*.listRowBackground(Color.clear)*/
                         } else {
-                           
-                            ForEach(viewModel.filteredStations, id: \.code) { station in
+                            
+                            ForEach(Array(viewModel.filteredStations.enumerated()), id: \.offset) { _, station in
                                 Button(action: {
                                     stationTitle = station.title ?? ""
-                                                                    stationCode = station.code ?? ""
+                                    stationCode = station.codes?.yandex_code ?? ""
                                     dismiss()
-                                    DispatchQueue.main.asyncAfter(deadline: .now() + 0.3) {
-                                        dismiss()
-                                    }
+                                    /*DispatchQueue.main.asyncAfter(deadline: .now() + 0.3) {
+                                     dismiss()
+                                     }*/
                                 }) {
                                     HStack {
                                         Text(station.title ?? "Без названия")
@@ -168,8 +168,8 @@ struct StationSelectionView: View {
             .toolbar(.hidden, for: .tabBar)
         }
         .task {
-                await viewModel.loadStations()
-            }
+            await viewModel.loadStations()
+        }
     }
 }
 

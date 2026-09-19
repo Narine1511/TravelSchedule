@@ -23,8 +23,8 @@ final class MainViewModel: ObservableObject {
     private let networkClient = NetworkClient.shared
     
     var isFormFilled: Bool {
-            !from.isEmpty && !to.isEmpty && !fromCode.isEmpty && !toCode.isEmpty
-        }
+        !from.isEmpty && !to.isEmpty && !fromCode.isEmpty && !toCode.isEmpty
+    }
     
     // MARK: - Действия
     func swapStations() {

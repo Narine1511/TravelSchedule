@@ -211,8 +211,8 @@ final class StationSelectionViewModel: ObservableObject {
                         guard let title = station.title, !title.isEmpty else { continue }
 
                         let key: String
-                        if let code = station.code, !code.isEmpty {
-                            key = code
+                        if let yandexCode = station.codes?.yandex_code, !yandexCode.isEmpty {
+                            key = yandexCode
                         } else {
                             key = "\(settlementTitle)|\(title)"
                         }
